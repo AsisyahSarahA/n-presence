@@ -30,4 +30,12 @@ class AcademicYear extends Model
     {
         return $this->hasMany(ClassRoom::class, 'academic_year_id');
     }
+
+    /**
+     * Alias relasi untuk kemudahan akses (classes).
+     */
+    public function classes(): HasMany
+    {
+        return $this->hasMany(ClassRoom::class, 'academic_year_id');
+    }
 }

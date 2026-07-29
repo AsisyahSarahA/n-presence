@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassRoom;
-use App\Models\Student;
 use App\Models\Setting;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class CardController extends Controller
@@ -22,8 +22,10 @@ class CardController extends Controller
         $students = Student::where('class_id', $class_id)->where('is_active', true)->orderBy('name', 'asc')->get();
 
         $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $appName = Setting::get('app_name', 'N-Presence');
+        $appLogo = Setting::get('app_logo', '');
 
-        return view('admin.qr-cards.print', compact('class', 'students', 'schoolName'));
+        return view('admin.qr-cards.print', compact('class', 'students', 'schoolName', 'appName', 'appLogo'));
     }
 
     public function printSingle($student_id)
@@ -33,7 +35,9 @@ class CardController extends Controller
         $students = collect([$student]);
 
         $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $appName = Setting::get('app_name', 'N-Presence');
+        $appLogo = Setting::get('app_logo', '');
 
-        return view('admin.qr-cards.print', compact('class', 'students', 'schoolName'));
+        return view('admin.qr-cards.print', compact('class', 'students', 'schoolName', 'appName', 'appLogo'));
     }
 }

@@ -13,8 +13,28 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         Setting::updateOrCreate(
+            ['key' => 'app_name'],
+            ['value' => 'N-Presence', 'description' => 'Nama Aplikasi']
+        );
+
+        Setting::updateOrCreate(
             ['key' => 'school_name'],
             ['value' => 'SMP Negeri Nangtang', 'description' => 'Nama Sekolah']
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'app_description'],
+            ['value' => 'Sistem Absensi SMP Negeri Nangtang', 'description' => 'Deskripsi / Subtitle Aplikasi']
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'app_logo'],
+            ['value' => '', 'description' => 'Logo Aplikasi']
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'app_footer'],
+            ['value' => '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']
         );
 
         Setting::updateOrCreate(

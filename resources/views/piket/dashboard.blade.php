@@ -3,39 +3,146 @@
 @section('title', 'Piket Dashboard')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-5 max-w-lg mx-auto pb-6">
+
     <!-- Welcome Header -->
-    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700/50">
-        <h1 class="text-xl font-bold text-white">Halo, {{ Auth::user()->name }}</h1>
-        <p class="text-xs text-slate-400 mt-1">Petugas Piket Hari Ini: {{ now()->translatedFormat('l, d F Y') }}</p>
-    </div>
-
-    <!-- Live Attendance Counter -->
-    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700/50 text-center shadow-lg">
-        <div class="text-sm text-slate-400 font-medium">Siswa Hadir Hari Ini</div>
-        <div class="text-5xl font-extrabold text-accent my-3">0</div>
-        <div class="text-xs text-slate-500">Menunggu scan kartu pertama...</div>
-    </div>
-
-    <!-- Scan Modes (Quick Shortcuts) -->
-    <div class="grid grid-cols-2 gap-4">
-        <a href="#" class="bg-slate-800 hover:bg-slate-750 p-5 rounded-2xl border border-slate-700/50 flex flex-col items-center justify-center text-center group transition-all">
-            <div class="w-12 h-12 bg-accent/10 text-accent rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-5 border border-slate-700/50 shadow-lg text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-full border border-emerald-400/30 uppercase tracking-wider">Petugas Piket</span>
+                <h1 class="text-xl font-bold text-white mt-1">Halo, {{ Auth::user()->name }} 👋</h1>
+                <p class="text-xs text-slate-300 mt-0.5">{{ Carbon\Carbon::today()->translatedFormat('l, d F Y') }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white border border-white/15">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>
             </div>
-            <span class="text-sm font-semibold text-white">Scan Masuk</span>
-        </a>
+        </div>
+    </div>
 
-        <a href="#" class="bg-slate-800 hover:bg-slate-750 p-5 rounded-2xl border border-slate-700/50 flex flex-col items-center justify-center text-center group transition-all">
-            <div class="w-12 h-12 bg-red-500/10 text-red-400 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+    <!-- Live Counter Cards -->
+    <div class="grid grid-cols-2 gap-3">
+        <!-- Hadir Tepat -->
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 shadow-md">
+            <div class="flex items-center justify-between text-emerald-400 mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider">Hadir Tepat</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
             </div>
-            <span class="text-sm font-semibold text-white">Scan Pulang</span>
-        </a>
+            <div class="text-3xl font-extrabold text-white">{{ $totalHadir }}</div>
+            <p class="text-[10px] text-slate-400 mt-1">Siswa Pagi Ini</p>
+        </div>
+
+        <!-- Terlambat -->
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 shadow-md">
+            <div class="flex items-center justify-between text-amber-400 mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider">Terlambat</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <div class="text-3xl font-extrabold text-white">{{ $totalTerlambat }}</div>
+            <p class="text-[10px] text-slate-400 mt-1">Tercatat Jam Telat</p>
+        </div>
+
+        <!-- Izin / Sakit -->
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 shadow-md">
+            <div class="flex items-center justify-between text-indigo-400 mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider">Izin & Sakit</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+            </div>
+            <div class="text-3xl font-extrabold text-white">{{ $totalIzinSakit }}</div>
+            <p class="text-[10px] text-slate-400 mt-1">Siswa Ber-Surat</p>
+        </div>
+
+        <!-- Total Siswa -->
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 shadow-md">
+            <div class="flex items-center justify-between text-slate-400 mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider">Total Siswa</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.089 20.08l-.014-.002A11.386 11.386 0 0 1 5.077 19.24v-.111c0-1.113.285-2.16.786-3.07M15 19.128v.11a11.386 11.386 0 0 1-4.914 1.107A11.378 11.378 0 0 1 5.08 19.24M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </div>
+            <div class="text-3xl font-extrabold text-white">{{ $totalStudents }}</div>
+            <p class="text-[10px] text-slate-400 mt-1">Target Absensi</p>
+        </div>
     </div>
+
+    <!-- Quick Action Launchers -->
+    <div class="space-y-2">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Menu Utama Piket</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <!-- Scan Masuk Launcher -->
+            <a href="{{ route('piket.scanner') }}?mode=in" class="bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 p-4 rounded-2xl text-white flex flex-col items-center justify-center text-center shadow-lg transition-all border border-blue-400/30">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider">Scan Masuk</span>
+                <span class="text-[9px] text-blue-100 mt-0.5">Pagi Hari</span>
+            </a>
+
+            <!-- Scan Pulang Launcher -->
+            <a href="{{ route('piket.scanner') }}?mode=out" class="bg-gradient-to-br from-purple-600 to-pink-700 hover:from-purple-500 hover:to-pink-600 p-4 rounded-2xl text-white flex flex-col items-center justify-center text-center shadow-lg transition-all border border-purple-400/30">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider">Scan Pulang</span>
+                <span class="text-[9px] text-purple-100 mt-0.5">Siang Hari</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Scans Stream -->
+    <div class="bg-slate-800/90 rounded-3xl p-5 border border-slate-700/50 shadow-md">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-700/50">
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Scan Presensi Terakhir</h3>
+            </div>
+            <span class="text-[10px] text-slate-400 font-mono">Live Sync</span>
+        </div>
+
+        <div class="space-y-2.5">
+            @forelse($recentScans as $scan)
+                <div class="flex items-center justify-between p-2.5 bg-slate-900/60 rounded-2xl border border-slate-700/40">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        @if($scan->student->photo_path)
+                            <img src="{{ asset('storage/' . $scan->student->photo_path) }}" class="w-8 h-8 rounded-full object-cover border border-slate-600">
+                        @else
+                            <div class="w-8 h-8 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-xs">
+                                {{ strtoupper(substr($scan->student->name, 0, 1)) }}
+                            </div>
+                        @endif
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">{{ $scan->student->name }}</h4>
+                            <p class="text-[10px] text-slate-400 font-mono">Kelas {{ $scan->student->classRoom->name ?? '-' }} — {{ $scan->time_in }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        @if($scan->status == 'Hadir')
+                            <span class="px-2 py-0.5 text-[9px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Hadir</span>
+                        @elseif($scan->status == 'Terlambat')
+                            <span class="px-2 py-0.5 text-[9px] font-bold rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">+{{ $scan->late_duration_minutes }}m</span>
+                        @else
+                            <span class="px-2 py-0.5 text-[9px] font-bold rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">{{ $scan->status }}</span>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="py-6 text-center text-xs text-slate-400">
+                    Belum ada siswa yang melakukan scan presensi hari ini.
+                </div>
+            @endforelse
+        </div>
+    </div>
+
 </div>
 @endsection

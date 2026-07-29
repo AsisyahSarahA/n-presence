@@ -64,6 +64,7 @@ class AttendanceController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'scan_type' => 'in',
             'student_name' => $student->name,
             'student_nisn' => $student->nisn,
             'student_class' => $student->classRoom->name ?? '-',
@@ -106,6 +107,7 @@ class AttendanceController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'scan_type' => 'out',
             'student_name' => $student->name,
             'student_nisn' => $student->nisn,
             'student_class' => $student->classRoom->name ?? '-',

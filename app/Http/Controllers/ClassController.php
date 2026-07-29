@@ -2,17 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassRoom;
 use App\Models\AcademicYear;
+use App\Models\ClassRoom;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $classes = ClassRoom::with('academicYear')->orderBy('name', 'asc')->paginate(7);
-        $academicYears = AcademicYear::all();
-        return view('admin.classes.index', compact('classes', 'academicYears'));
+        $query = ClassRoom::with('academicYear')->withCount('students');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('homeroom_teacher', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('academic_year_id')) {
+            $query->where('academic_year_id', $request->academic_year_id);
+        }
+
+        $classes = $query->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        $academicYears = AcademicYear::orderBy('id', 'desc')->get();
+
+        $stats = [
+            'total_classes' => ClassRoom::count(),
+            'total_students' => Student::where('is_active', true)->count(),
+            'teacher_assigned' => ClassRoom::whereNotNull('homeroom_teacher')->where('homeroom_teacher', '!=', '')->count(),
+        ];
+
+        return view('admin.classes.index', compact('classes', 'academicYears', 'stats'));
     }
 
     public function store(Request $request)

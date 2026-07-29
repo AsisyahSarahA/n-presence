@@ -8,10 +8,24 @@ use Illuminate\Support\Facades\DB;
 
 class AcademicYearController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $years = AcademicYear::orderBy('name', 'desc')->paginate(7);
-        return view('admin.academic-years.index', compact('years'));
+        $query = AcademicYear::withCount('classes');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $years = $query->orderBy('name', 'desc')->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => AcademicYear::count(),
+            'active' => AcademicYear::where('is_active', true)->first(),
+            'inactive' => AcademicYear::where('is_active', false)->count(),
+        ];
+
+        return view('admin.academic-years.index', compact('years', 'stats'));
     }
 
     public function store(Request $request)

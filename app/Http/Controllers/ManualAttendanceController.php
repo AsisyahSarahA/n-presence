@@ -19,6 +19,15 @@ class ManualAttendanceController extends Controller
         $classId = $request->input('class_id');
 
         $students = collect();
+        $summary = [
+            'total' => 0,
+            'hadir' => 0,
+            'terlambat' => 0,
+            'izin' => 0,
+            'sakit' => 0,
+            'alpa' => 0,
+            'belum_absen' => 0,
+        ];
 
         if ($classId) {
             $students = Student::select(
@@ -36,15 +45,19 @@ class ManualAttendanceController extends Controller
                 })
                 ->where('students.class_id', $classId)
                 ->where('students.is_active', true)
-                ->where(function ($q) {
-                    $q->whereNull('attendances.id')
-                        ->orWhere('attendances.status', '!=', 'Hadir');
-                })
                 ->orderBy('students.name')
                 ->get();
+
+            $summary['total'] = $students->count();
+            $summary['hadir'] = $students->where('attendance_status', 'Hadir')->count();
+            $summary['terlambat'] = $students->where('attendance_status', 'Terlambat')->count();
+            $summary['izin'] = $students->where('attendance_status', 'Izin')->count();
+            $summary['sakit'] = $students->where('attendance_status', 'Sakit')->count();
+            $summary['alpa'] = $students->where('attendance_status', 'Alpa')->count();
+            $summary['belum_absen'] = $students->whereNull('attendance_status')->count();
         }
 
-        return view('admin.attendances.manual', compact('classes', 'date', 'classId', 'students'));
+        return view('admin.attendances.manual', compact('classes', 'date', 'classId', 'students', 'summary'));
     }
 
     public function store(Request $request)
@@ -53,14 +66,24 @@ class ManualAttendanceController extends Controller
             'date' => 'required|date',
             'attendances' => 'required|array',
             'attendances.*.student_id' => 'required|exists:students,id',
-            'attendances.*.status' => 'required|in:Hadir,Sakit,Izin,Alpa',
+            'attendances.*.status' => 'nullable|in:Hadir,Terlambat,Sakit,Izin,Alpa',
             'attendances.*.notes' => 'nullable|string|max:255',
         ]);
 
         $date = $request->date;
+        $updatedCount = 0;
 
         foreach ($request->attendances as $item) {
-            $status = $item['status'];
+            $status = $item['status'] ?? null;
+            
+            if (!$status) {
+                // Jika status di-uncheck atau dibosongkan, hapus data absensi jika ada
+                Attendance::where('student_id', $item['student_id'])
+                    ->where('date', $date)
+                    ->delete();
+                continue;
+            }
+
             $existing = Attendance::where('student_id', $item['student_id'])
                 ->where('date', $date)
                 ->first();
@@ -71,20 +94,22 @@ class ManualAttendanceController extends Controller
                 'scanned_by' => Auth::id(),
             ];
 
-            if ($status === 'Hadir') {
+            if ($status === 'Hadir' || $status === 'Terlambat') {
                 if (!$existing || !$existing->time_in) {
-                    $data['time_in'] = now();
+                    $data['time_in'] = now()->format('H:i:s');
                 }
             } else {
                 $data['time_in'] = null;
+                $data['time_out'] = null;
             }
 
             Attendance::updateOrCreate(
                 ['student_id' => $item['student_id'], 'date' => $date],
                 $data
             );
+            $updatedCount++;
         }
 
-        return redirect()->back()->with('success', 'Data kehadiran berhasil diperbarui.');
+        return redirect()->back()->with('success', "Berhasil memperbarui data presensi untuk {$updatedCount} siswa.");
     }
 }

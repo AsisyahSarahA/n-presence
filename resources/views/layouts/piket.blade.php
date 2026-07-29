@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Piket Dashboard') - N-Presence</title>
+    <title>@yield('title', 'Piket Dashboard') - {{ $appName ?? 'N-Presence' }}</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,7 +105,10 @@
     <!-- Topbar Header -->
     <header class="h-14 bg-slate-800 border-b border-slate-700/50 flex items-center justify-between px-4 sticky top-0 z-50">
         <div class="flex items-center space-x-2">
-            <span class="text-base font-bold tracking-wide text-white">N-Presence</span>
+            @if(!empty($appLogo) && file_exists(public_path($appLogo)))
+                <img src="{{ asset($appLogo) }}" alt="{{ $appName ?? 'Logo' }}" class="w-6 h-6 object-contain rounded-md bg-white/10 p-0.5">
+            @endif
+            <span class="text-base font-bold tracking-wide text-white">{{ $appName ?? 'N-Presence' }}</span>
             <span class="px-2 py-0.5 bg-accent/20 text-accent text-[10px] font-semibold rounded-full hidden sm:inline">Piket</span>
         </div>
 

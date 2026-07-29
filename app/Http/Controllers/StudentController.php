@@ -27,10 +27,22 @@ class StudentController extends Controller
             $query->where('class_id', $request->class_id);
         }
 
-        $students = $query->orderBy('name', 'asc')->paginate(7)->withQueryString();
+        // Filter Gender
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
+        $students = $query->orderBy('name', 'asc')->paginate(10)->withQueryString();
         $classes = ClassRoom::with('academicYear')->orderBy('name', 'asc')->get();
 
-        return view('admin.students.index', compact('students', 'classes'));
+        $stats = [
+            'total' => Student::count(),
+            'active' => Student::where('is_active', true)->count(),
+            'male' => Student::where('gender', 'L')->count(),
+            'female' => Student::where('gender', 'P')->count(),
+        ];
+
+        return view('admin.students.index', compact('students', 'classes', 'stats'));
     }
 
     public function create()
@@ -50,6 +62,7 @@ class StudentController extends Controller
         ]);
 
         $data = $request->only(['nisn', 'name', 'class_id', 'gender']);
+        $data['is_active'] = true;
 
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
@@ -85,9 +98,8 @@ class StudentController extends Controller
         $data = $request->only(['nisn', 'name', 'class_id', 'gender']);
 
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
             if ($student->photo_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($student->photo_path);
+                Storage::disk('public')->delete($student->photo_path);
             }
 
             $file = $request->file('photo');
@@ -106,7 +118,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
 
         if ($student->photo_path) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($student->photo_path);
+            Storage::disk('public')->delete($student->photo_path);
         }
 
         $student->delete();

@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // =============================================
+// PUBLIC PERMIT REQUEST (Pengajuan Wali Murid)
+// =============================================
+Route::get('/pengajuan-izin', [\App\Http\Controllers\PublicPermitController::class, 'create'])->name('public.permits.create');
+Route::post('/pengajuan-izin', [\App\Http\Controllers\PublicPermitController::class, 'store'])->name('public.permits.store');
+
+// =============================================
 // AUTH ROUTES (Public)
 // =============================================
 Route::middleware('guest')->group(function () {
@@ -71,7 +77,10 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/qr-cards/print-single/{student_id}', [CardController::class, 'printSingle'])->name('qr-cards.print-single');
 
         // Laporan & Rekap
-        Route::get('/reports/daily', [ReportController::class, 'dailyReport'])->name('reports.daily');
+        Route::get('/reports/daily', [ReportController::class, 'index'])->name('reports.daily');
+        Route::get('/reports/print-daily', [ReportController::class, 'printDaily'])->name('reports.print_daily');
+        Route::get('/reports/print-monthly', [ReportController::class, 'printMonthly'])->name('reports.print_monthly');
+        Route::get('/reports/print-semester', [ReportController::class, 'printSemester'])->name('reports.print_semester');
         Route::get('/reports/export/excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
         Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
 
@@ -82,6 +91,9 @@ Route::middleware(['auth', 'role:admin'])
         // Izin & Sakit
         Route::get('/permits', [PermitController::class, 'index'])->name('permits.index');
         Route::post('/permits', [PermitController::class, 'store'])->name('permits.store');
+        Route::post('/permits/{id}/approve', [PermitController::class, 'approve'])->name('permits.approve');
+        Route::post('/permits/{id}/reject', [PermitController::class, 'reject'])->name('permits.reject');
+        Route::delete('/permits/{id}', [PermitController::class, 'destroy'])->name('permits.destroy');
 
         // Manajemen Kehadiran Manual per Kelas
         Route::get('/attendances/manual', [\App\Http\Controllers\ManualAttendanceController::class, 'index'])->name('attendances.manual.index');
@@ -96,9 +108,7 @@ Route::middleware(['auth', 'role:piket'])
     ->name('piket.')
     ->group(function () {
 
-        Route::get('/', function () {
-            return view('piket.dashboard');
-        })->name('dashboard');
+        Route::get('/', [\App\Http\Controllers\PiketDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/scanner', function () {
             return view('piket.scanner');

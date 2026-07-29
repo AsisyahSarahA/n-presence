@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard') - N-Presence</title>
+    <title>@yield('title', 'Admin Dashboard') - {{ $appName ?? 'N-Presence' }}</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,14 +44,19 @@
 </head>
 <body class="bg-slate-100 font-sans min-h-screen flex">
     
-    <!-- Sidebar ... (keep rest) ... -->
-
     <!-- Sidebar -->
-    <aside class="w-64 bg-primary text-slate-100 flex-shrink-0 flex flex-col justify-between hidden md:flex">
+    <aside class="w-64 bg-primary text-slate-100 flex-shrink-0 flex-col justify-between hidden md:flex">
         <div>
             <!-- Sidebar Header -->
-            <div class="h-16 flex items-center px-6 border-b border-slate-700/50">
-                <span class="text-xl font-bold tracking-wider text-white">N-Presence</span>
+            <div class="h-16 flex items-center px-5 border-b border-slate-700/50">
+                @if(!empty($appLogo) && file_exists(public_path($appLogo)))
+                    <img src="{{ asset($appLogo) }}" alt="{{ $appName ?? 'Logo' }}" class="w-9 h-9 object-contain mr-3 rounded-lg shadow-sm bg-white/10 p-0.5">
+                @else
+                    <div class="w-9 h-9 bg-secondary/20 text-secondary rounded-lg flex items-center justify-center mr-3 font-bold text-lg border border-secondary/30">
+                        {{ strtoupper(substr($appName ?? 'N', 0, 1)) }}
+                    </div>
+                @endif
+                <span class="text-lg font-bold tracking-wide text-white truncate">{{ $appName ?? 'N-Presence' }}</span>
             </div>
 
             <nav class="mt-6 px-4 space-y-1.5">
