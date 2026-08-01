@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Admin Dashboard')
-@section('header_title', 'Dashboard Utama')
+@section('header_title', 'Dashboard ')
 
 @section('content')
 <div class="space-y-6">
-    
+
     <!-- Welcome Header & Quick Toolbar -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden">
         <div class="z-10">
@@ -111,7 +111,7 @@
 
     <!-- Charts & Activity Feed Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         <!-- Live Recent Activity Feed (Left Column) -->
         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
