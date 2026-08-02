@@ -37,7 +37,7 @@
     </div>
 
     <!-- Summary Cards Row -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <!-- Total Siswa -->
         <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
             <div class="flex items-center justify-between">
@@ -49,13 +49,13 @@
                 </div>
             </div>
             <h3 class="text-2xl font-black text-slate-800 mt-2">{{ $totalStudents }}</h3>
-            <p class="text-[10px] text-slate-500 mt-0.5">Persentase Kehadiran: <span class="font-bold text-emerald-600">{{ $attendancePercentage }}%</span></p>
+            <p class="text-[10px] text-slate-500 mt-0.5">Kehadiran: <span class="font-bold text-emerald-600">{{ $attendancePercentage }}%</span></p>
         </div>
 
         <!-- Hadir -->
         <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Hadir Tepat Waktu</span>
+                <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Hadir Tepat</span>
                 <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -80,6 +80,20 @@
             <p class="text-[10px] text-slate-500 mt-0.5">Tercatat Jam Telat</p>
         </div>
 
+        <!-- Siswa Sudah Pulang -->
+        <div class="bg-purple-50/80 border border-purple-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold text-purple-700 uppercase tracking-wider">Sudah Pulang</span>
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-2xl font-black text-purple-800 mt-2">{{ $totalSudahPulang }}</h3>
+            <p class="text-[10px] text-purple-600 mt-0.5">Sudah Scan Pulang</p>
+        </div>
+
         <!-- Izin / Sakit -->
         <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
             <div class="flex items-center justify-between">
@@ -95,7 +109,7 @@
         </div>
 
         <!-- Alpa -->
-        <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all col-span-2 lg:col-span-1">
+        <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
             <div class="flex items-center justify-between">
                 <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Alpa / Absen</span>
                 <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
@@ -155,6 +169,12 @@
                         </div>
                     @endforelse
                 </div>
+
+                @if($recentScans->hasPages())
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        {{ $recentScans->links('vendor.pagination.white-navy') }}
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -174,12 +194,12 @@
             <!-- Class Matrix Breakdown -->
             <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 class="text-sm font-bold text-slate-800 mb-3">Persentase Kehadiran per Kelas Hari Ini</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 max-h-[280px] overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-slate-200">
                     @foreach($classSummaries as $cs)
                         <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
                             <div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-1">
                                 <span>Kelas {{ $cs['name'] }}</span>
-                                <span class="text-emerald-600">{{ $cs['percentage'] }}%</span>
+                                <span class="text-emerald-600 font-extrabold">{{ $cs['percentage'] }}%</span>
                             </div>
                             <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
                                 <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ $cs['percentage'] }}%"></div>
@@ -233,7 +253,7 @@
 
         @if($lateStudents->hasPages())
             <div class="px-6 py-4 border-t border-slate-200">
-                {{ $lateStudents->links() }}
+                {{ $lateStudents->links('vendor.pagination.white-navy') }}
             </div>
         @endif
     </div>

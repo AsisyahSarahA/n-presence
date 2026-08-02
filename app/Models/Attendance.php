@@ -18,13 +18,31 @@ class Attendance extends Model
         'status',
         'late_duration_minutes',
         'scanned_by',
+        'is_admin_override',
         'notes',
         'attachment',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'is_admin_override' => 'boolean',
     ];
+
+    /**
+     * Accessor untuk menentukan status efektif absensi (terutama untuk Laporan).
+     * Siswa dihitung HADIR/TERLAMBAT hanya jika sudah scan pulang (time_out != null)
+     * atau telah di-override secara manual oleh Admin.
+     */
+    public function getEffectiveStatusAttribute(): string
+    {
+        if (in_array($this->status, ['Hadir', 'Terlambat'])) {
+            if ($this->time_out === null && !$this->is_admin_override) {
+                return 'Alpa';
+            }
+        }
+
+        return $this->status ?? 'Alpa';
+    }
 
     /**
      * Relasi: Absensi merujuk ke satu Siswa.

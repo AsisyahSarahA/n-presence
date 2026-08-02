@@ -41,11 +41,12 @@ class ReportController extends Controller
                 ->get();
 
             $dailySummary['total'] = $dailyAttendances->count();
-            $dailySummary['hadir'] = $dailyAttendances->where('status', 'Hadir')->count();
-            $dailySummary['terlambat'] = $dailyAttendances->where('status', 'Terlambat')->count();
-            $dailySummary['izin'] = $dailyAttendances->where('status', 'Izin')->count();
-            $dailySummary['sakit'] = $dailyAttendances->where('status', 'Sakit')->count();
-            $dailySummary['alpa'] = $dailyAttendances->where('status', 'Alpa')->count();
+            $dailySummary['hadir'] = $dailyAttendances->filter(fn($att) => $att->effective_status === 'Hadir')->count();
+            $dailySummary['terlambat'] = $dailyAttendances->filter(fn($att) => $att->effective_status === 'Terlambat')->count();
+            $dailySummary['izin'] = $dailyAttendances->filter(fn($att) => $att->effective_status === 'Izin')->count();
+            $dailySummary['sakit'] = $dailyAttendances->filter(fn($att) => $att->effective_status === 'Sakit')->count();
+            $dailySummary['alpa'] = $dailyAttendances->filter(fn($att) => $att->effective_status === 'Alpa')->count();
+            $dailySummary['sudah_pulang'] = $dailyAttendances->whereNotNull('time_out')->count();
         }
 
         // =============================================
@@ -70,11 +71,11 @@ class ReportController extends Controller
                     ->whereYear('date', $monthlyYear)
                     ->get();
 
-                $hadir = $attendances->where('status', 'Hadir')->count();
-                $terlambat = $attendances->where('status', 'Terlambat')->count();
-                $izin = $attendances->where('status', 'Izin')->count();
-                $sakit = $attendances->where('status', 'Sakit')->count();
-                $alpa = $attendances->where('status', 'Alpa')->count();
+                $hadir = $attendances->filter(fn($a) => $a->effective_status === 'Hadir')->count();
+                $terlambat = $attendances->filter(fn($a) => $a->effective_status === 'Terlambat')->count();
+                $izin = $attendances->filter(fn($a) => $a->effective_status === 'Izin')->count();
+                $sakit = $attendances->filter(fn($a) => $a->effective_status === 'Sakit')->count();
+                $alpa = $attendances->filter(fn($a) => $a->effective_status === 'Alpa')->count();
 
                 $totalRecord = $hadir + $terlambat + $izin + $sakit + $alpa;
                 $presentCount = $hadir + $terlambat;
@@ -118,9 +119,9 @@ class ReportController extends Controller
                     ->whereIn(DB::raw('MONTH(date)'), $months)
                     ->get();
 
-                $sakit = $attendances->where('status', 'Sakit')->count();
-                $izin = $attendances->where('status', 'Izin')->count();
-                $alpa = $attendances->where('status', 'Alpa')->count();
+                $sakit = $attendances->filter(fn($a) => $a->effective_status === 'Sakit')->count();
+                $izin = $attendances->filter(fn($a) => $a->effective_status === 'Izin')->count();
+                $alpa = $attendances->filter(fn($a) => $a->effective_status === 'Alpa')->count();
 
                 return [
                     'student' => $student,
@@ -199,11 +200,11 @@ class ReportController extends Controller
                 ->whereYear('date', $year)
                 ->get();
 
-            $hadir = $attendances->where('status', 'Hadir')->count();
-            $terlambat = $attendances->where('status', 'Terlambat')->count();
-            $izin = $attendances->where('status', 'Izin')->count();
-            $sakit = $attendances->where('status', 'Sakit')->count();
-            $alpa = $attendances->where('status', 'Alpa')->count();
+            $hadir = $attendances->filter(fn($a) => $a->effective_status === 'Hadir')->count();
+            $terlambat = $attendances->filter(fn($a) => $a->effective_status === 'Terlambat')->count();
+            $izin = $attendances->filter(fn($a) => $a->effective_status === 'Izin')->count();
+            $sakit = $attendances->filter(fn($a) => $a->effective_status === 'Sakit')->count();
+            $alpa = $attendances->filter(fn($a) => $a->effective_status === 'Alpa')->count();
 
             $totalRecord = $hadir + $terlambat + $izin + $sakit + $alpa;
             $presentCount = $hadir + $terlambat;
@@ -250,9 +251,9 @@ class ReportController extends Controller
 
             return [
                 'student' => $student,
-                'sakit' => $attendances->where('status', 'Sakit')->count(),
-                'izin' => $attendances->where('status', 'Izin')->count(),
-                'alpa' => $attendances->where('status', 'Alpa')->count(),
+                'sakit' => $attendances->filter(fn($a) => $a->effective_status === 'Sakit')->count(),
+                'izin' => $attendances->filter(fn($a) => $a->effective_status === 'Izin')->count(),
+                'alpa' => $attendances->filter(fn($a) => $a->effective_status === 'Alpa')->count(),
             ];
         });
 

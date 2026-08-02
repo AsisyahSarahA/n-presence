@@ -85,21 +85,22 @@
                                 <td class="py-3.5 px-6 text-center font-mono">{{ $attendance->time_in ?? '-' }}</td>
                                 <td class="py-3.5 px-6 text-center font-mono">{{ $attendance->time_out ?? '-' }}</td>
                                 <td class="py-3.5 px-6 text-center">
-                                    @if($attendance->status == 'Hadir')
+                                    @php $effStatus = $attendance->effective_status; @endphp
+                                    @if($effStatus == 'Hadir')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                                             Hadir
                                         </span>
-                                    @elseif($attendance->status == 'Terlambat')
+                                    @elseif($effStatus == 'Terlambat')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
                                             Terlambat
                                         </span>
-                                    @elseif($attendance->status == 'Alpa')
+                                    @elseif($effStatus == 'Alpa')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
                                             Alpa
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800">
-                                            {{ $attendance->status }}
+                                            {{ $effStatus }}
                                         </span>
                                     @endif
                                 </td>

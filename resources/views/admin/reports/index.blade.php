@@ -80,7 +80,7 @@
             </form>
 
             <!-- Summary Cards Daily -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                 <div class="bg-white border border-slate-200 p-3 rounded-2xl text-center shadow-sm">
                     <div class="text-[10px] font-bold text-slate-400 uppercase">Total Siswa</div>
                     <div class="text-lg font-bold text-slate-800 mt-0.5">{{ $dailySummary['total'] }}</div>
@@ -92,6 +92,10 @@
                 <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-center shadow-sm">
                     <div class="text-[10px] font-bold text-amber-600 uppercase">Terlambat</div>
                     <div class="text-lg font-bold text-amber-700 mt-0.5">{{ $dailySummary['terlambat'] }}</div>
+                </div>
+                <div class="bg-purple-50 border border-purple-200 p-3 rounded-2xl text-center shadow-sm">
+                    <div class="text-[10px] font-bold text-purple-600 uppercase">Sudah Pulang</div>
+                    <div class="text-lg font-bold text-purple-700 mt-0.5">{{ $dailySummary['sudah_pulang'] ?? 0 }}</div>
                 </div>
                 <div class="bg-blue-50 border border-blue-200 p-3 rounded-2xl text-center shadow-sm">
                     <div class="text-[10px] font-bold text-blue-600 uppercase">Izin</div>
@@ -114,8 +118,9 @@
                         <tr>
                             <th class="py-3 px-4 w-10 text-center">No</th>
                             <th class="py-3 px-4">NISN & Nama Siswa</th>
-                            <th class="py-3 px-4 text-center">Status</th>
+                            <th class="py-3 px-4 text-center">Status Laporan</th>
                             <th class="py-3 px-4 text-center">Jam Masuk</th>
+                            <th class="py-3 px-4 text-center">Jam Pulang</th>
                             <th class="py-3 px-4 text-center">Terlambat</th>
                             <th class="py-3 px-4">Catatan / Alasan</th>
                         </tr>
@@ -130,7 +135,8 @@
                                 </td>
                                 <td class="py-3 px-4 text-center">
                                     @php
-                                        $bCol = match($att->status) {
+                                        $effStatus = $att->effective_status;
+                                        $bCol = match($effStatus) {
                                             'Hadir' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
                                             'Terlambat' => 'bg-amber-100 text-amber-800 border-amber-200',
                                             'Izin' => 'bg-blue-100 text-blue-800 border-blue-200',
@@ -139,11 +145,18 @@
                                         };
                                     @endphp
                                     <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $bCol }}">
-                                        {{ $att->status }}
+                                        {{ $effStatus }}
                                     </span>
                                 </td>
                                 <td class="py-3 px-4 text-center font-mono font-semibold">
                                     {{ $att->time_in ? \Carbon\Carbon::parse($att->time_in)->format('H:i:s') : '-' }}
+                                </td>
+                                <td class="py-3 px-4 text-center font-mono font-semibold">
+                                    @if($att->time_out)
+                                        <span class="text-emerald-700">{{ \Carbon\Carbon::parse($att->time_out)->format('H:i:s') }}</span>
+                                    @else
+                                        <span class="text-rose-500 font-normal italic">Belum Pulang</span>
+                                    @endif
                                 </td>
                                 <td class="py-3 px-4 text-center font-semibold text-amber-700">
                                     {{ $att->late_duration_minutes > 0 ? $att->late_duration_minutes . ' menit' : '-' }}
@@ -154,7 +167,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-8 text-center text-slate-400 text-sm">
+                                <td colspan="7" class="py-8 text-center text-slate-400 text-sm">
                                     Belum ada data presensi pada tanggal dan kelas ini.
                                 </td>
                             </tr>

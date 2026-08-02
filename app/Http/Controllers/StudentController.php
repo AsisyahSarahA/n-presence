@@ -6,6 +6,10 @@ use App\Models\Student;
 use App\Models\ClassRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
 
 class StudentController extends Controller
 {
@@ -58,17 +62,14 @@ class StudentController extends Controller
             'name' => 'required|string|max:100',
             'class_id' => 'required|exists:classes,id',
             'gender' => 'required|in:L,P',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->only(['nisn', 'name', 'class_id', 'gender']);
         $data['is_active'] = true;
 
         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '_' . $request->nisn . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('photos', $filename, 'public');
-            $data['photo_path'] = $path;
+            $data['photo_path'] = $this->uploadAndCompressPhoto($request->file('photo'), $request->nisn);
         }
 
         Student::create($data);
@@ -92,20 +93,18 @@ class StudentController extends Controller
             'name' => 'required|string|max:100',
             'class_id' => 'required|exists:classes,id',
             'gender' => 'required|in:L,P',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->only(['nisn', 'name', 'class_id', 'gender']);
 
         if ($request->hasFile('photo')) {
-            if ($student->photo_path) {
+            // Hapus foto lama dari storage jika ada
+            if ($student->photo_path && Storage::disk('public')->exists($student->photo_path)) {
                 Storage::disk('public')->delete($student->photo_path);
             }
 
-            $file = $request->file('photo');
-            $filename = time() . '_' . $request->nisn . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('photos', $filename, 'public');
-            $data['photo_path'] = $path;
+            $data['photo_path'] = $this->uploadAndCompressPhoto($request->file('photo'), $request->nisn);
         }
 
         $student->update($data);
@@ -117,12 +116,69 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
 
-        if ($student->photo_path) {
+        if ($student->photo_path && Storage::disk('public')->exists($student->photo_path)) {
             Storage::disk('public')->delete($student->photo_path);
         }
 
         $student->delete();
 
         return redirect()->route('admin.students.index')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function show($id)
+    {
+        $student = Student::with(['classRoom.academicYear'])->findOrFail($id);
+        $attendances = $student->attendances()
+            ->orderBy('date', 'desc')
+            ->paginate(15);
+
+        $summary = [
+            'total_records' => $student->attendances()->count(),
+            'hadir' => $student->attendances()->where('status', 'Hadir')->count(),
+            'terlambat' => $student->attendances()->where('status', 'Terlambat')->count(),
+            'izin' => $student->attendances()->where('status', 'Izin')->count(),
+            'sakit' => $student->attendances()->where('status', 'Sakit')->count(),
+            'alpa' => $student->attendances()->where('status', 'Alpa')->count(),
+        ];
+
+        return view('admin.students.show', compact('student', 'attendances', 'summary'));
+    }
+
+    /**
+     * Compress & Resize uploaded student photo using Intervention Image
+     * Resizes to 500x500 square ratio, converts to .webp format at 75% quality.
+     */
+    private function uploadAndCompressPhoto($file, string $nisn): string
+    {
+        try {
+            $filename = 'photo_' . time() . '_' . md5($nisn . microtime()) . '.webp';
+            $manager = new ImageManager(new Driver());
+
+            if (method_exists($manager, 'read')) {
+                $image = $manager->read($file->getRealPath());
+            } else {
+                $image = $manager->decodePath($file->getRealPath());
+            }
+
+            // Resize & Crop ke rasio persegi 500x500px
+            $image->cover(500, 500);
+
+            // Kompresi ke format WebP kualitas 75%
+            if (class_exists(WebpEncoder::class)) {
+                $encoded = $image->encode(new WebpEncoder(quality: 75));
+            } else {
+                $encoded = $image->encodeUsingFileExtension('webp', quality: 75);
+            }
+
+            $path = 'photos/' . $filename;
+            Storage::disk('public')->put($path, (string) $encoded);
+
+            return $path;
+        } catch (\Throwable $e) {
+            Log::error('Intervention Image Compression Error: ' . $e->getMessage());
+            // Fallback aman: Simpan file biasa jika kompresi gagal
+            $filename = time() . '_' . $nisn . '.' . $file->getClientOriginalExtension();
+            return $file->storeAs('photos', $filename, 'public');
+        }
     }
 }

@@ -9,14 +9,18 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AttendanceController extends Controller
 {
+    private static $timeInLimit = null;
+    private static $timeOutStart = null;
+
     public function scanIn(Request $request): JsonResponse
     {
         $request->validate(['nisn' => 'required|string']);
 
-        $student = Student::where('nisn', $request->nisn)->where('is_active', true)->first();
+        $student = Student::with('classRoom')->where('nisn', $request->nisn)->where('is_active', true)->first();
         if (!$student) {
             return response()->json(['status' => 'error', 'message' => 'Siswa tidak ditemukan atau tidak aktif.'], 404);
         }
@@ -38,7 +42,12 @@ class AttendanceController extends Controller
         }
 
         $timeIn = now();
-        $lateLimit = Setting::get('time_in_limit', '07:00');
+        if (self::$timeInLimit === null) {
+            self::$timeInLimit = Cache::remember('time_in_limit', 3600, function () {
+                return Setting::get('time_in_limit', '07:00');
+            });
+        }
+        $lateLimit = self::$timeInLimit;
         $lateDuration = null;
         $status = 'Hadir';
 
@@ -50,7 +59,6 @@ class AttendanceController extends Controller
 
         $motivationHadir = 'Keren! Terima kasih sudah datang tepat waktu hari ini. Tetap semangat belajarnya ya! 🌟';
         $motivationTelat = 'Yah, kamu terlambat. Tapi nggak apa-apa, lebih baik terlambat daripada tidak datang. Besok bangun lebih pagi ya! 💪';
-        $motivationPulang = 'Selamat istirahat! Hati-hati di jalan pulang ya. Sampai jumpa besok! 🏡';
 
         Attendance::updateOrCreate(
             ['student_id' => $student->id, 'date' => $today],
@@ -79,7 +87,7 @@ class AttendanceController extends Controller
     {
         $request->validate(['nisn' => 'required|string']);
 
-        $student = Student::where('nisn', $request->nisn)->where('is_active', true)->first();
+        $student = Student::with('classRoom')->where('nisn', $request->nisn)->where('is_active', true)->first();
         if (!$student) {
             return response()->json(['status' => 'error', 'message' => 'Siswa tidak ditemukan atau tidak aktif.'], 404);
         }
@@ -87,13 +95,23 @@ class AttendanceController extends Controller
         $today = now()->toDateString();
         $attendance = Attendance::where('student_id', $student->id)->where('date', $today)->first();
 
-        if (!$attendance) {
+        // Check 1: Jika tidak ada data absensi atau status Izin/Sakit/Alpa
+        if ($attendance && in_array($attendance->status, ['Izin', 'Sakit', 'Alpa'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Siswa ini tercatat {$attendance->status} hari ini. Scan pulang tidak dapat dilakukan."
+            ], 409);
+        }
+
+        // Check 2: Jika belum melakukan scan masuk (time_in masih kosong)
+        if (!$attendance || !$attendance->time_in) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Siswa ini belum melakukan scan masuk hari ini. Scan pulang tidak dapat dilakukan.'
             ], 409);
         }
 
+        // Check if student has already scanned out
         if ($attendance->time_out) {
             return response()->json([
                 'status' => 'error',
@@ -101,9 +119,31 @@ class AttendanceController extends Controller
             ], 409);
         }
 
+        // Check if current time is before allowed scan-out time
+        if (self::$timeOutStart === null) {
+            self::$timeOutStart = Cache::remember('time_out_start', 3600, function () {
+                return Setting::get('time_out_start', '13:00');
+            });
+        }
+        $startTime = Carbon::parse(self::$timeOutStart);
+        if (now()->lessThan($startTime)) {
+            return response()->json([
+                'status' => 'warning',
+                'scan_type' => 'out',
+                'student_name' => $student->name,
+                'student_nisn' => $student->nisn,
+                'student_class' => $student->classRoom->name ?? '-',
+                'student_photo' => $student->photo_path ? asset('storage/' . $student->photo_path) : null,
+                'message' => 'Belum saatnya scan pulang! Scan pulang baru diperbolehkan mulai pukul ' . $startTime->format('H:i') . '.',
+            ], 422);
+        }
+
+        $now = now();
         $attendance->update([
-            'time_out' => now(),
+            'time_out' => $now,
         ]);
+
+        $timeOutFormatted = $now->format('H:i');
 
         return response()->json([
             'status' => 'success',
@@ -113,8 +153,9 @@ class AttendanceController extends Controller
             'student_class' => $student->classRoom->name ?? '-',
             'student_photo' => $student->photo_path ? asset('storage/' . $student->photo_path) : null,
             'attendance_status' => 'Hadir',
+            'time_out' => $timeOutFormatted,
             'late_duration' => $attendance->late_duration_minutes ? "{$attendance->late_duration_minutes}" : '0',
-            'motivation_text' => 'Selamat istirahat! Hati-hati di jalan pulang ya. Sampai jumpa besok! 🏡',
+            'motivation_text' => 'Hari yang luar biasa... hati-hati di jalan! 🏡',
         ]);
     }
 }

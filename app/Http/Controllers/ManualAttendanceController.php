@@ -17,6 +17,8 @@ class ManualAttendanceController extends Controller
 
         $date = $request->input('date', now()->toDateString());
         $classId = $request->input('class_id');
+        $search = $request->input('search');
+        $statusFilter = $request->input('status_filter');
 
         $students = collect();
         $summary = [
@@ -27,17 +29,15 @@ class ManualAttendanceController extends Controller
             'sakit' => 0,
             'alpa' => 0,
             'belum_absen' => 0,
+            'sudah_pulang' => 0,
         ];
 
         if ($classId) {
-            $students = Student::select(
+            // Full list for summary statistics
+            $allStudents = Student::select(
                 'students.id',
-                'students.nisn',
-                'students.name',
-                'attendances.id as attendance_id',
                 'attendances.status as attendance_status',
-                'attendances.notes as attendance_notes',
-                'attendances.time_in as attendance_time_in'
+                'attendances.time_out as attendance_time_out'
             )
                 ->leftJoin('attendances', function ($join) use ($date) {
                     $join->on('students.id', '=', 'attendances.student_id')
@@ -45,19 +45,59 @@ class ManualAttendanceController extends Controller
                 })
                 ->where('students.class_id', $classId)
                 ->where('students.is_active', true)
-                ->orderBy('students.name')
                 ->get();
 
-            $summary['total'] = $students->count();
-            $summary['hadir'] = $students->where('attendance_status', 'Hadir')->count();
-            $summary['terlambat'] = $students->where('attendance_status', 'Terlambat')->count();
-            $summary['izin'] = $students->where('attendance_status', 'Izin')->count();
-            $summary['sakit'] = $students->where('attendance_status', 'Sakit')->count();
-            $summary['alpa'] = $students->where('attendance_status', 'Alpa')->count();
-            $summary['belum_absen'] = $students->whereNull('attendance_status')->count();
+            $summary['total'] = $allStudents->count();
+            $summary['hadir'] = $allStudents->where('attendance_status', 'Hadir')->count();
+            $summary['terlambat'] = $allStudents->where('attendance_status', 'Terlambat')->count();
+            $summary['izin'] = $allStudents->where('attendance_status', 'Izin')->count();
+            $summary['sakit'] = $allStudents->where('attendance_status', 'Sakit')->count();
+            $summary['alpa'] = $allStudents->where('attendance_status', 'Alpa')->count();
+            $summary['belum_absen'] = $allStudents->whereNull('attendance_status')->count();
+            $summary['sudah_pulang'] = $allStudents->whereNotNull('attendance_time_out')->count();
+
+            // Filtered Query for Student Table List
+            $query = Student::select(
+                'students.id',
+                'students.nisn',
+                'students.name',
+                'attendances.id as attendance_id',
+                'attendances.status as attendance_status',
+                'attendances.notes as attendance_notes',
+                'attendances.time_in as attendance_time_in',
+                'attendances.time_out as attendance_time_out'
+            )
+                ->leftJoin('attendances', function ($join) use ($date) {
+                    $join->on('students.id', '=', 'attendances.student_id')
+                        ->where('attendances.date', '=', $date);
+                })
+                ->where('students.class_id', $classId)
+                ->where('students.is_active', true);
+
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('students.name', 'like', "%{$search}%")
+                      ->orWhere('students.nisn', 'like', "%{$search}%");
+                });
+            }
+
+            if ($statusFilter) {
+                if ($statusFilter === 'Belum Absen') {
+                    $query->whereNull('attendances.status');
+                } elseif ($statusFilter === 'Sudah Pulang') {
+                    $query->whereNotNull('attendances.time_out');
+                } elseif ($statusFilter === 'Belum Pulang') {
+                    $query->whereIn('attendances.status', ['Hadir', 'Terlambat'])
+                          ->whereNull('attendances.time_out');
+                } else {
+                    $query->where('attendances.status', $statusFilter);
+                }
+            }
+
+            $students = $query->orderBy('students.name')->get();
         }
 
-        return view('admin.attendances.manual', compact('classes', 'date', 'classId', 'students', 'summary'));
+        return view('admin.attendances.manual', compact('classes', 'date', 'classId', 'students', 'summary', 'search', 'statusFilter'));
     }
 
     public function store(Request $request)
@@ -95,10 +135,12 @@ class ManualAttendanceController extends Controller
             ];
 
             if ($status === 'Hadir' || $status === 'Terlambat') {
+                $data['is_admin_override'] = true;
                 if (!$existing || !$existing->time_in) {
                     $data['time_in'] = now()->format('H:i:s');
                 }
             } else {
+                $data['is_admin_override'] = false;
                 $data['time_in'] = null;
                 $data['time_out'] = null;
             }
