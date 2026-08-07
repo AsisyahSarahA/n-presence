@@ -4,21 +4,21 @@
 
 @section('content')
 <style>
-    #reader { 
-        width: 100% !important; 
+    #reader {
+        width: 100% !important;
         height: 100% !important;
-        overflow: hidden; 
-        border-radius: 1.5rem; 
-        background-color: #000000; 
+        overflow: hidden;
+        border-radius: 1.5rem;
+        background-color: #000000;
         position: relative;
     }
-    #reader video { 
-        object-fit: cover !important; 
-        width: 100% !important; 
-        height: 100% !important; 
-        min-height: 280px; 
+    #reader video {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 280px;
         border-radius: 1.5rem;
-        transform: none !important; 
+        transform: none !important;
     }
     #reader video.scan-mode-out {
         box-shadow: inset 0 0 30px rgba(168, 85, 247, 0.2);
@@ -60,7 +60,7 @@
     <!-- Mode Selector Buttons -->
     <div class="grid grid-cols-2 gap-3">
         <!-- Mode Masuk -->
-        <button id="btn-mode-in" onclick="setMode('in')" 
+        <button id="btn-mode-in" onclick="setMode('in')"
             class="flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-md shadow-blue-500/10 bg-blue-600 border-blue-600 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-1 text-white">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
@@ -70,7 +70,7 @@
         </button>
 
         <!-- Mode Pulang -->
-        <button id="btn-mode-out" onclick="setMode('out')" 
+        <button id="btn-mode-out" onclick="setMode('out')"
             class="flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-sm bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/80">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
@@ -188,7 +188,7 @@
     function setMode(mode) {
         if (isProcessing) return;
         currentMode = mode;
-        
+
         const btnIn = document.getElementById('btn-mode-in');
         const btnOut = document.getElementById('btn-mode-out');
         const camera = document.getElementById('camera-container');
@@ -200,7 +200,7 @@
         if (mode === 'in') {
             btnIn.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-md shadow-blue-500/10 bg-blue-600 border-blue-600 text-white";
             btnIn.querySelector('svg').className = "w-6 h-6 mb-1 text-white";
-            
+
             btnOut.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-sm bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/80";
             btnOut.querySelector('svg').className = "w-6 h-6 mb-1 text-slate-400 dark:text-slate-500";
 
@@ -232,26 +232,26 @@
         if (toastTimeout) clearTimeout(toastTimeout);
         const toast = document.getElementById('scan-toast');
         const body = document.getElementById('toast-body');
-        
+
         body.className = "p-4 rounded-3xl shadow-2xl border bg-slate-800 border-slate-700 text-slate-100 transition-all duration-300";
-        
+
         document.getElementById('toast-student-name').innerHTML = `<div class="h-4 w-28 bg-slate-700 rounded animate-pulse"></div>`;
         document.getElementById('toast-student-nisn').innerHTML = `<div class="h-3 w-20 bg-slate-700/80 rounded animate-pulse mt-1"></div>`;
         document.getElementById('toast-student-class').innerHTML = `<div class="h-3 w-16 bg-slate-700/80 rounded animate-pulse mt-1"></div>`;
         document.getElementById('toast-status-msg').innerText = 'Memproses absensi...';
         document.getElementById('toast-scan-time').innerText = '';
-        
+
         const photoDiv = document.getElementById('toast-photo');
         const initialDiv = document.getElementById('toast-photo-initial');
         const imgEl = document.getElementById('toast-photo-img');
-        
+
         imgEl.classList.add('hidden');
         initialDiv.classList.remove('hidden');
         photoDiv.className = "w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border-2 border-slate-700 shadow-sm flex items-center justify-center";
         initialDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-700 animate-pulse"></div>`;
-        
+
         document.getElementById('toast-motivation-wrap').classList.add('hidden');
-        
+
         toast.classList.remove('translate-y-32', 'opacity-0');
         toast.classList.add('translate-y-0', 'opacity-100');
     }
