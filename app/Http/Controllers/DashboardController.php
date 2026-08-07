@@ -21,6 +21,7 @@ class DashboardController extends Controller
         $totalTerlambat = Attendance::where('date', $today)->where('status', 'Terlambat')->count();
         $totalAlpa = Attendance::where('date', $today)->where('status', 'Alpa')->count();
         $totalIzinSakit = Attendance::where('date', $today)->whereIn('status', ['Izin', 'Sakit'])->count();
+        $totalSudahPulang = Attendance::where('date', $today)->whereNotNull('time_out')->count();
 
         $totalScanned = $totalHadir + $totalTerlambat + $totalIzinSakit + $totalAlpa;
         $attendancePercentage = $totalStudents > 0 ? round((($totalHadir + $totalTerlambat) / $totalStudents) * 100, 1) : 0;
@@ -30,8 +31,7 @@ class DashboardController extends Controller
             ->where('date', $today)
             ->whereNotNull('time_in')
             ->orderBy('updated_at', 'desc')
-            ->limit(7)
-            ->get();
+            ->paginate(5);
 
         // 3. Rekap Per Kelas Hari Ini
         $classSummaries = ClassRoom::withCount(['students' => function($q) {
@@ -90,7 +90,7 @@ class DashboardController extends Controller
         }
 
         return view('admin.dashboard', compact(
-            'totalStudents', 'totalHadir', 'totalTerlambat', 'totalAlpa', 'totalIzinSakit', 'attendancePercentage',
+            'totalStudents', 'totalHadir', 'totalTerlambat', 'totalAlpa', 'totalIzinSakit', 'totalSudahPulang', 'attendancePercentage',
             'recentScans', 'classSummaries', 'lateStudents', 'chartLabels', 'chartHadir', 'chartTerlambat'
         ));
     }

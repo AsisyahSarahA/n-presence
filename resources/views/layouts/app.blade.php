@@ -142,6 +142,15 @@
                     <span>Izin & Sakit</span>
                 </a>
 
+                <!-- Kelola User -->
+                <a href="{{ route('admin.users.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.users.*') ? 'bg-secondary text-white font-medium shadow-md shadow-secondary/20' : 'text-slate-300 hover:bg-[#2a4a7f] hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.089 20.08l-.014-.002A11.386 11.386 0 0 1 5.077 19.24v-.111c0-1.113.285-2.16.786-3.07M15 19.128v.11a11.386 11.386 0 0 1-4.914 1.107A11.378 11.378 0 0 1 5.08 19.24M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 2.25a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0ZM6 10.5a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                    </svg>
+                    <span>Kelola User</span>
+                </a>
+
                 <!-- Pengaturan -->
                 <a href="{{ route('admin.settings.index') }}" 
                    class="flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-secondary text-white font-medium shadow-md shadow-secondary/20' : 'text-slate-300 hover:bg-[#2a4a7f] hover:text-white' }}">

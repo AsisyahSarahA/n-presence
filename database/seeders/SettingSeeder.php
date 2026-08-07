@@ -46,5 +46,10 @@ class SettingSeeder extends Seeder
             ['key' => 'time_in_tolerance'],
             ['value' => '07:15', 'description' => 'Batas Toleransi Keterlambatan']
         );
+
+        Setting::updateOrCreate(
+            ['key' => 'time_out_start'],
+            ['value' => '13:00', 'description' => 'Batas Jam Mulai Scan Pulang']
+        );
     }
 }

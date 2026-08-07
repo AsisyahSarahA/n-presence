@@ -154,11 +154,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                                 </svg>
                             </span>
-                            <input type="text" name="app_footer" id="app_footer" value="{{ old('app_footer', $appFooter) }}"
-                                class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800"
+                            <input type="text" id="app_footer" value="{{ $appFooter }}" disabled
+                                class="w-full pl-11 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed"
                                 placeholder="Contoh: © 2026 KKN Kelompok 02 Nangtang. All rights reserved.">
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1">Ditampilkan di bagian bawah login & footer halaman.</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Hak cipta sudah ditetapkan, tidak dapat diubah. Ditampilkan di bagian bawah login & footer halaman.</p>
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@
             </div>
 
             <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div>
                         <label for="time_in_limit" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Batas Jam Masuk</label>
                         <div class="relative">
@@ -193,7 +193,7 @@
                             <input type="time" name="time_in_limit" id="time_in_limit" value="{{ old('time_in_limit', $timeInLimit) }}" required
                                 class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800 font-medium">
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1">Siswa yang melakukan scan sebelum jam ini dianggap hadir tepat waktu.</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Siswa yang scan sebelum jam ini dianggap hadir tepat waktu.</p>
                     </div>
 
                     <div>
@@ -208,6 +208,20 @@
                                 class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800 font-medium">
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Siswa yang scan setelah jam ini otomatis dihitung terlambat.</p>
+                    </div>
+
+                    <div>
+                        <label for="time_out_start" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Jam Mulai Scan Pulang</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </span>
+                            <input type="time" name="time_out_start" id="time_out_start" value="{{ old('time_out_start', $timeOutStart ?? '13:00') }}" required
+                                class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800 font-medium">
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Scan pulang baru diizinkan mulai dari jam ini.</p>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PermitController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,11 +28,16 @@ Route::post('/pengajuan-izin', [\App\Http\Controllers\PublicPermitController::cl
 // =============================================
 // AUTH ROUTES (Public)
 // =============================================
-Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    });
+Route::get('/', function () {
+    if (Auth::check()) {
+        return Auth::user()->isAdmin() 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('piket.dashboard');
+    }
+    return redirect()->route('login');
+});
 
+Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 });
@@ -67,6 +73,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/students', [StudentController::class, 'index'])->name('students.index');
         Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
         Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+        Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
         Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
         Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
@@ -98,6 +105,14 @@ Route::middleware(['auth', 'role:admin'])
         // Manajemen Kehadiran Manual per Kelas
         Route::get('/attendances/manual', [\App\Http\Controllers\ManualAttendanceController::class, 'index'])->name('attendances.manual.index');
         Route::post('/attendances/manual', [\App\Http\Controllers\ManualAttendanceController::class, 'store'])->name('attendances.manual.store');
+
+        // CRUD Manajemen User
+        Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [\App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
     });
 
 // =============================================
@@ -109,6 +124,7 @@ Route::middleware(['auth', 'role:piket'])
     ->group(function () {
 
         Route::get('/', [\App\Http\Controllers\PiketDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/today', [\App\Http\Controllers\PiketDashboardController::class, 'today'])->name('today');
 
         Route::get('/scanner', function () {
             return view('piket.scanner');

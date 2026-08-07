@@ -35,29 +35,69 @@
 
     <!-- FILTER CARD -->
     <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-        <form method="GET" action="{{ route('admin.attendances.manual.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            <div>
-                <label for="date" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Tanggal</label>
-                <input type="date" name="date" id="date" value="{{ $date }}" required
-                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium text-slate-800 bg-slate-50">
+        <form method="GET" action="{{ route('admin.attendances.manual.index') }}" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <!-- Custom Tanggal -->
+                <div>
+                    <label for="date" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Tanggal</label>
+                    <input type="date" name="date" id="date" value="{{ $date }}" required
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium text-slate-800 bg-slate-50">
+                </div>
+
+                <!-- Pilih Kelas -->
+                <div>
+                    <label for="class_id" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Kelas</label>
+                    <select name="class_id" id="class_id" required
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-slate-50 font-medium text-slate-800">
+                        <option value="">-- Pilih Kelas --</option>
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}" {{ (string)$classId === (string)$class->id ? 'selected' : '' }}>
+                                Kelas {{ $class->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Cari Nama / NISN -->
+                <div>
+                    <label for="search" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Cari Nama / NISN</label>
+                    <div class="relative">
+                        <input type="text" name="search" id="search_input" value="{{ $search ?? '' }}"
+                            placeholder="Ketik Nama atau NISN..." onkeyup="liveFilterTable()"
+                            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium text-slate-800 bg-slate-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-400 absolute left-3 top-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Filter Status -->
+                <div>
+                    <label for="status_filter" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Filter Status</label>
+                    <select name="status_filter" id="status_filter_select" onchange="liveFilterTable()"
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-slate-50 font-medium text-slate-800">
+                        <option value="">-- Semua Status --</option>
+                        <option value="Hadir" {{ ($statusFilter ?? '') === 'Hadir' ? 'selected' : '' }}>Hadir</option>
+                        <option value="Terlambat" {{ ($statusFilter ?? '') === 'Terlambat' ? 'selected' : '' }}>Terlambat</option>
+                        <option value="Izin" {{ ($statusFilter ?? '') === 'Izin' ? 'selected' : '' }}>Izin</option>
+                        <option value="Sakit" {{ ($statusFilter ?? '') === 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                        <option value="Alpa" {{ ($statusFilter ?? '') === 'Alpa' ? 'selected' : '' }}>Alpa</option>
+                        <option value="Belum Absen" {{ ($statusFilter ?? '') === 'Belum Absen' ? 'selected' : '' }}>Belum Absen</option>
+                        <option value="Sudah Pulang" {{ ($statusFilter ?? '') === 'Sudah Pulang' ? 'selected' : '' }}>Sudah Pulang</option>
+                        <option value="Belum Pulang" {{ ($statusFilter ?? '') === 'Belum Pulang' ? 'selected' : '' }}>Belum Pulang</option>
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label for="class_id" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Kelas</label>
-                <select name="class_id" id="class_id" required
-                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-slate-50 font-medium text-slate-800">
-                    <option value="">-- Pilih Kelas --</option>
-                    @foreach ($classes as $class)
-                        <option value="{{ $class->id }}" {{ (string)$classId === (string)$class->id ? 'selected' : '' }}>
-                            Kelas {{ $class->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+                @if($search || $statusFilter)
+                    <a href="{{ route('admin.attendances.manual.index', ['date' => $date, 'class_id' => $classId]) }}" 
+                       class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all">
+                        Reset Filter
+                    </a>
+                @endif
                 <button type="submit"
-                    class="w-full py-2.5 bg-primary hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
+                    class="px-6 py-2.5 bg-primary hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
@@ -69,7 +109,7 @@
 
     @if ($classId)
         <!-- SUMMARY STATS BADGES -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
             <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm text-center">
                 <div class="text-[10px] font-bold uppercase text-slate-400">Total Siswa</div>
                 <div class="text-xl font-extrabold text-slate-800 mt-1">{{ $summary['total'] }}</div>
@@ -81,6 +121,10 @@
             <div class="bg-amber-50/80 border border-amber-200/80 p-3.5 rounded-2xl shadow-sm text-center">
                 <div class="text-[10px] font-bold uppercase text-amber-600">Terlambat</div>
                 <div class="text-xl font-extrabold text-amber-700 mt-1">{{ $summary['terlambat'] }}</div>
+            </div>
+            <div class="bg-purple-50/80 border border-purple-200/80 p-3.5 rounded-2xl shadow-sm text-center">
+                <div class="text-[10px] font-bold uppercase text-purple-600">Sudah Pulang</div>
+                <div class="text-xl font-extrabold text-purple-700 mt-1">{{ $summary['sudah_pulang'] }}</div>
             </div>
             <div class="bg-blue-50/80 border border-blue-200/80 p-3.5 rounded-2xl shadow-sm text-center">
                 <div class="text-[10px] font-bold uppercase text-blue-600">Izin</div>
@@ -94,7 +138,7 @@
                 <div class="text-[10px] font-bold uppercase text-red-600">Alpha</div>
                 <div class="text-xl font-extrabold text-red-700 mt-1">{{ $summary['alpa'] }}</div>
             </div>
-            <div class="bg-slate-100 border border-slate-200 p-3.5 rounded-2xl shadow-sm text-center col-span-2 sm:col-span-1">
+            <div class="bg-slate-100 border border-slate-200 p-3.5 rounded-2xl shadow-sm text-center">
                 <div class="text-[10px] font-bold uppercase text-slate-500">Belum Absen</div>
                 <div class="text-xl font-extrabold text-slate-600 mt-1">{{ $summary['belum_absen'] }}</div>
             </div>
@@ -106,8 +150,11 @@
             <!-- Toolbar & Quick Action Buttons -->
             <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="font-bold text-slate-800 text-sm">
-                        Lembar Presensi Siswa ({{ $students->count() }} siswa)
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center space-x-2">
+                        <span>Lembar Presensi Siswa</span>
+                        <span class="px-2.5 py-0.5 bg-primary/10 text-primary text-xs font-extrabold rounded-full" id="visible-count-badge">
+                            {{ $students->count() }} siswa
+                        </span>
                     </h3>
                     <p class="text-xs text-slate-500 mt-0.5">Pilih status absensi untuk masing-masing siswa di bawah ini.</p>
                 </div>
@@ -146,14 +193,20 @@
                                 <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
                                     <th class="py-3.5 px-4 w-10 text-center">No</th>
                                     <th class="py-3.5 px-4">NISN & Nama Siswa</th>
-                                    <th class="py-3.5 px-4 text-center">Status Terakhir</th>
+                                    <th class="py-3.5 px-4 text-center">Status Masuk</th>
+                                    <th class="py-3.5 px-4 text-center">Status Pulang</th>
                                     <th class="py-3.5 px-4 text-center">Pilih Status Baru</th>
                                     <th class="py-3.5 px-4 w-56">Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700">
                                 @foreach ($students as $index => $student)
-                                    <tr class="hover:bg-slate-50/80 transition-all">
+                                    <tr class="hover:bg-slate-50/80 transition-all student-row" 
+                                        data-timeout="{{ $student->attendance_time_out ? 'true' : 'false' }}"
+                                        data-name="{{ strtolower($student->name) }}"
+                                        data-nisn="{{ strtolower($student->nisn) }}"
+                                        data-status="{{ $student->attendance_status ?? 'Belum Absen' }}"
+                                        data-student-id="{{ $student->id }}">
                                         <td class="py-3.5 px-4 text-slate-400 font-mono text-center">{{ $index + 1 }}</td>
                                         <td class="py-3.5 px-4">
                                             <div class="font-bold text-slate-900 text-sm">{{ $student->name }}</div>
@@ -177,6 +230,18 @@
                                                     <span class="ml-1 text-[10px] opacity-75">({{ \Carbon\Carbon::parse($student->attendance_time_in)->format('H:i') }})</span>
                                                 @endif
                                             </span>
+                                        </td>
+                                        <td class="py-3.5 px-4 text-center">
+                                            @if($student->attendance_time_out)
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                                    Sudah Pulang
+                                                    <span class="ml-1 text-[10px] opacity-75">({{ \Carbon\Carbon::parse($student->attendance_time_out)->format('H:i') }})</span>
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                                                    Belum Pulang
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="py-3.5 px-4">
                                             <div class="flex items-center justify-center flex-wrap gap-1.5">
@@ -238,42 +303,127 @@
 
 @section('scripts')
 <script>
+    function liveFilterTable() {
+        const searchInput = document.getElementById('search_input');
+        const statusSelect = document.getElementById('status_filter_select');
+        const badge = document.getElementById('visible-count-badge');
+        
+        if (!searchInput || !statusSelect) return;
+
+        const searchVal = searchInput.value.toLowerCase().trim();
+        const statusVal = statusSelect.value;
+        const rows = document.querySelectorAll('.student-row');
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const name = row.getAttribute('data-name') || '';
+            const nisn = row.getAttribute('data-nisn') || '';
+            const status = row.getAttribute('data-status') || 'Belum Absen';
+            const isTimeout = row.getAttribute('data-timeout') === 'true';
+
+            const matchesSearch = !searchVal || name.includes(searchVal) || nisn.includes(searchVal);
+            
+            let matchesStatus = true;
+            if (statusVal === 'Sudah Pulang') {
+                matchesStatus = isTimeout;
+            } else if (statusVal === 'Belum Pulang') {
+                matchesStatus = (status === 'Hadir' || status === 'Terlambat') && !isTimeout;
+            } else if (statusVal) {
+                matchesStatus = status === statusVal;
+            }
+
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (badge) {
+            badge.innerText = `${visibleCount} siswa`;
+        }
+    }
+
     function setAllStatus(statusName) {
         const radios = document.querySelectorAll(`.status-radio-${statusName}`);
         radios.forEach(radio => {
-            radio.checked = true;
+            // Hanya radio button pada baris yang terlihat (visible) yang di-check
+            const row = radio.closest('tr');
+            if (row && row.style.display !== 'none') {
+                radio.checked = true;
+            }
         });
 
         Swal.fire({
             toast: true,
             position: 'top-end',
             icon: 'info',
-            title: `Seluruh siswa ditandai '${statusName}'`,
+            title: `Siswa yang tampil ditandai '${statusName}'`,
             showConfirmButton: false,
             timer: 1500
         });
     }
 
     function confirmSave() {
-        Swal.fire({
-            title: 'Simpan Presensi Kelas?',
-            text: 'Seluruh pilihan status kehadiran siswa pada tanggal ini akan diperbarui.',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#1e3a5f',
-            cancelButtonColor: '#94a3b8',
-            confirmButtonText: 'Ya, Simpan!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                popup: 'rounded-3xl',
-                confirmButton: 'rounded-xl text-sm px-5 py-2 font-semibold',
-                cancelButton: 'rounded-xl text-sm px-5 py-2 font-semibold'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('formBulk').submit();
+        let unpulangSelected = [];
+        const rows = document.querySelectorAll('tr[data-timeout]');
+
+        rows.forEach(row => {
+            const isTimeout = row.getAttribute('data-timeout') === 'true';
+            const studentName = row.getAttribute('data-name');
+            const selectedRadio = row.querySelector('input[type="radio"]:checked');
+
+            if (selectedRadio && (selectedRadio.value === 'Hadir' || selectedRadio.value === 'Terlambat') && !isTimeout) {
+                unpulangSelected.push(studentName);
             }
         });
+
+        if (unpulangSelected.length > 0) {
+            let sampleNames = unpulangSelected.slice(0, 3).map(n => n.toUpperCase()).join(', ');
+            if (unpulangSelected.length > 3) sampleNames += `, dan ${unpulangSelected.length - 3} lainnya`;
+
+            Swal.fire({
+                title: '⚠️ Peringatan Scan Pulang!',
+                html: `Terdapat <strong>${unpulangSelected.length} siswa</strong> (${sampleNames}) yang <strong>belum melakukan scan pulang</strong>.<br><br>Apakah Anda yakin ingin menetapkan status <strong>HADIR / TERLAMBAT</strong> secara paksa (Admin Override)?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d97706',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Ya, Simpan Paksa!',
+                cancelButtonText: 'Batal / Periksa Kembali',
+                customClass: {
+                    popup: 'rounded-3xl',
+                    confirmButton: 'rounded-xl text-sm px-5 py-2 font-semibold',
+                    cancelButton: 'rounded-xl text-sm px-5 py-2 font-semibold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formBulk').submit();
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Simpan Presensi Kelas?',
+                text: 'Seluruh pilihan status kehadiran siswa pada tanggal ini akan diperbarui.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#1e3a5f',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    popup: 'rounded-3xl',
+                    confirmButton: 'rounded-xl text-sm px-5 py-2 font-semibold',
+                    cancelButton: 'rounded-xl text-sm px-5 py-2 font-semibold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formBulk').submit();
+                }
+            });
+        }
     }
 </script>
 @endsection

@@ -16,6 +16,7 @@ class SettingController extends Controller
         $appFooter = Setting::get('app_footer', '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.');
         $timeInLimit = Setting::get('time_in_limit', '07:00');
         $timeInTolerance = Setting::get('time_in_tolerance', '07:15');
+        $timeOutStart = Setting::get('time_out_start', '13:00');
 
         return view('admin.settings.index', compact(
             'appName',
@@ -24,7 +25,8 @@ class SettingController extends Controller
             'appLogo',
             'appFooter',
             'timeInLimit',
-            'timeInTolerance'
+            'timeInTolerance',
+            'timeOutStart'
         ));
     }
 
@@ -34,19 +36,23 @@ class SettingController extends Controller
             'app_name' => 'required|string|max:100',
             'school_name' => 'required|string|max:100',
             'app_description' => 'nullable|string|max:255',
-            'app_footer' => 'nullable|string|max:255',
             'app_logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:2048',
             'remove_logo' => 'nullable|boolean',
             'time_in_limit' => 'required|date_format:H:i',
             'time_in_tolerance' => 'required|date_format:H:i|after_or_equal:time_in_limit',
+            'time_out_start' => 'required|date_format:H:i',
         ]);
 
         Setting::updateOrCreate(['key' => 'app_name'], ['value' => $request->app_name, 'description' => 'Nama Aplikasi']);
         Setting::updateOrCreate(['key' => 'school_name'], ['value' => $request->school_name, 'description' => 'Nama Sekolah']);
         Setting::updateOrCreate(['key' => 'app_description'], ['value' => $request->app_description, 'description' => 'Deskripsi / Subtitle Aplikasi']);
-        Setting::updateOrCreate(['key' => 'app_footer'], ['value' => $request->app_footer, 'description' => 'Teks Footer Aplikasi']);
+        Setting::updateOrCreate(['key' => 'app_footer'], ['value' => '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']);
         Setting::updateOrCreate(['key' => 'time_in_limit'], ['value' => $request->time_in_limit, 'description' => 'Batas Jam Masuk']);
         Setting::updateOrCreate(['key' => 'time_in_tolerance'], ['value' => $request->time_in_tolerance, 'description' => 'Toleransi Jam Masuk']);
+        Setting::updateOrCreate(['key' => 'time_out_start'], ['value' => $request->time_out_start, 'description' => 'Batas Jam Mulai Scan Pulang']);
+
+        \Illuminate\Support\Facades\Cache::forget('time_in_limit');
+        \Illuminate\Support\Facades\Cache::forget('time_out_start');
 
         $currentLogo = Setting::get('app_logo');
 
