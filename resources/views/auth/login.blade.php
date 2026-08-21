@@ -45,7 +45,7 @@
                     </div>
                 @endif
                 <h1 class="text-2xl font-bold text-slate-800 tracking-wide">{{ $appName ?? 'N-Presence' }}</h1>
-                <p class="text-sm text-slate-500 mt-1 font-medium">{{ $appDescription ?? 'Sistem Absensi SMP Negeri Nangtang' }}</p>
+                <p class="text-sm text-slate-500 mt-1 font-medium">{{ $appDescription ?? 'Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG' }}</p>
             </div>
 
             <!-- Validation Errors -->
@@ -107,7 +107,7 @@
             </form>
         </div>
         <div class="px-8 py-4 bg-slate-50 border-t border-slate-100 text-center">
-            <span class="text-xs text-slate-400 font-medium">{{ $appFooter ?? '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.' }}</span>
+            <span class="text-xs text-slate-400 font-medium">{{ $appFooter ?? '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.' }}</span>
         </div>
     </div>
 

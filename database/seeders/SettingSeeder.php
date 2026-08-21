@@ -19,12 +19,12 @@ class SettingSeeder extends Seeder
 
         Setting::updateOrCreate(
             ['key' => 'school_name'],
-            ['value' => 'SMP Negeri Nangtang', 'description' => 'Nama Sekolah']
+            ['value' => 'SMPN SATU ATAP 1 CIGALONTANG', 'description' => 'Nama Sekolah']
         );
 
         Setting::updateOrCreate(
             ['key' => 'app_description'],
-            ['value' => 'Sistem Absensi SMP Negeri Nangtang', 'description' => 'Deskripsi / Subtitle Aplikasi']
+            ['value' => 'Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG', 'description' => 'Deskripsi / Subtitle Aplikasi']
         );
 
         Setting::updateOrCreate(
@@ -34,7 +34,7 @@ class SettingSeeder extends Seeder
 
         Setting::updateOrCreate(
             ['key' => 'app_footer'],
-            ['value' => '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']
+            ['value' => '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']
         );
 
         Setting::updateOrCreate(

@@ -41,7 +41,7 @@
                 </div>
             @endif
             <h1 class="text-xl font-bold tracking-wide">{{ $appName ?? 'N-Presence' }}</h1>
-            <p class="text-xs text-slate-300 mt-1 font-medium">{{ $schoolName ?? 'SMP Negeri Nangtang' }}</p>
+            <p class="text-xs text-slate-300 mt-1 font-medium">{{ $schoolName ?? 'SMPN SATU ATAP 1 CIGALONTANG' }}</p>
             <div class="mt-4 inline-block px-4 py-1.5 bg-white/10 rounded-full text-xs font-medium text-slate-200 border border-white/10">
                 Form Pengajuan Izin / Sakit Siswa Mandiri
             </div>
@@ -164,7 +164,7 @@
         </div>
 
         <div class="px-8 py-4 bg-slate-50 border-t border-slate-100 text-center">
-            <span class="text-xs text-slate-400">{{ $appFooter ?? '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.' }}</span>
+            <span class="text-xs text-slate-400">{{ $appFooter ?? '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.' }}</span>
         </div>
     </div>
 

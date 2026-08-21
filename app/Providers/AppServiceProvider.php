@@ -31,10 +31,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             if (Schema::hasTable('settings')) {
                 $view->with('appName', Setting::get('app_name', 'N-Presence'));
-                $view->with('schoolName', Setting::get('school_name', 'SMP Negeri Nangtang'));
-                $view->with('appDescription', Setting::get('app_description', 'Sistem Absensi SMP Negeri Nangtang'));
+                $view->with('schoolName', Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG'));
+                $view->with('appDescription', Setting::get('app_description', 'Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG'));
                 $view->with('appLogo', Setting::get('app_logo'));
-                $view->with('appFooter', Setting::get('app_footer', '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.'));
+                $view->with('appFooter', Setting::get('app_footer', '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.'));
+                $view->with('timeInLimit', Setting::get('time_in_limit', '07:00'));
+                $view->with('timeInTolerance', Setting::get('time_in_tolerance', '07:15'));
+                $view->with('timeOutStart', Setting::get('time_out_start', '13:00'));
             }
         });
     }

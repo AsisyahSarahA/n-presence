@@ -21,7 +21,7 @@ class CardController extends Controller
         $class = ClassRoom::with('academicYear')->findOrFail($class_id);
         $students = Student::where('class_id', $class_id)->where('is_active', true)->orderBy('name', 'asc')->get();
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
         $appLogo = Setting::get('app_logo', '');
 
@@ -34,7 +34,7 @@ class CardController extends Controller
         $class = $student->classRoom;
         $students = collect([$student]);
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
         $appLogo = Setting::get('app_logo', '');
 

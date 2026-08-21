@@ -174,7 +174,7 @@
                 <p class="text-[10px] text-slate-500 mt-0.5">NIP. ........................................</p>
             </div>
             <div>
-                <p class="font-medium">Nangtang, {{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</p>
+                <p class="font-medium">Cigalontang, {{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</p>
                 <p class="font-bold text-slate-900">Wali Kelas / Petugas Piket</p>
                 <div class="h-16"></div>
                 <p class="font-bold underline text-slate-900">( ________________________ )</p>

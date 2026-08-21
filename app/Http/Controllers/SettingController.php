@@ -10,10 +10,10 @@ class SettingController extends Controller
     public function index()
     {
         $appName = Setting::get('app_name', 'N-Presence');
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
-        $appDescription = Setting::get('app_description', 'Sistem Absensi SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
+        $appDescription = Setting::get('app_description', 'Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG');
         $appLogo = Setting::get('app_logo');
-        $appFooter = Setting::get('app_footer', '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.');
+        $appFooter = Setting::get('app_footer', '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.');
         $timeInLimit = Setting::get('time_in_limit', '07:00');
         $timeInTolerance = Setting::get('time_in_tolerance', '07:15');
         $timeOutStart = Setting::get('time_out_start', '13:00');
@@ -38,20 +38,25 @@ class SettingController extends Controller
             'app_description' => 'nullable|string|max:255',
             'app_logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:2048',
             'remove_logo' => 'nullable|boolean',
-            'time_in_limit' => 'required|date_format:H:i',
-            'time_in_tolerance' => 'required|date_format:H:i|after_or_equal:time_in_limit',
-            'time_out_start' => 'required|date_format:H:i',
+            'time_in_limit' => ['required', 'regex:/^(?:2[0-3]|[01][0-9]):[0-5][0-9](?::[0-5][0-9])?$/'],
+            'time_in_tolerance' => ['required', 'regex:/^(?:2[0-3]|[01][0-9]):[0-5][0-9](?::[0-5][0-9])?$/'],
+            'time_out_start' => ['required', 'regex:/^(?:2[0-3]|[01][0-9]):[0-5][0-9](?::[0-5][0-9])?$/'],
         ]);
+
+        $timeInLimit = substr($request->time_in_limit, 0, 5);
+        $timeInTolerance = substr($request->time_in_tolerance, 0, 5);
+        $timeOutStart = substr($request->time_out_start, 0, 5);
 
         Setting::updateOrCreate(['key' => 'app_name'], ['value' => $request->app_name, 'description' => 'Nama Aplikasi']);
         Setting::updateOrCreate(['key' => 'school_name'], ['value' => $request->school_name, 'description' => 'Nama Sekolah']);
         Setting::updateOrCreate(['key' => 'app_description'], ['value' => $request->app_description, 'description' => 'Deskripsi / Subtitle Aplikasi']);
         Setting::updateOrCreate(['key' => 'app_footer'], ['value' => '© 2026 KKN Kelompok 02 Nangtang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']);
-        Setting::updateOrCreate(['key' => 'time_in_limit'], ['value' => $request->time_in_limit, 'description' => 'Batas Jam Masuk']);
-        Setting::updateOrCreate(['key' => 'time_in_tolerance'], ['value' => $request->time_in_tolerance, 'description' => 'Toleransi Jam Masuk']);
-        Setting::updateOrCreate(['key' => 'time_out_start'], ['value' => $request->time_out_start, 'description' => 'Batas Jam Mulai Scan Pulang']);
+        Setting::updateOrCreate(['key' => 'time_in_limit'], ['value' => $timeInLimit, 'description' => 'Batas Jam Masuk']);
+        Setting::updateOrCreate(['key' => 'time_in_tolerance'], ['value' => $timeInTolerance, 'description' => 'Toleransi Jam Masuk']);
+        Setting::updateOrCreate(['key' => 'time_out_start'], ['value' => $timeOutStart, 'description' => 'Batas Jam Mulai Scan Pulang']);
 
         \Illuminate\Support\Facades\Cache::forget('time_in_limit');
+        \Illuminate\Support\Facades\Cache::forget('time_in_tolerance');
         \Illuminate\Support\Facades\Cache::forget('time_out_start');
 
         $currentLogo = Setting::get('app_logo');

@@ -107,7 +107,7 @@
                     </svg>
                 </div>
                 <span class="text-xs font-bold uppercase tracking-wider">Scan Pulang</span>
-                <span class="text-[9px] text-purple-100 mt-0.5">Siang Hari</span>
+                <span class="text-[9px] text-purple-100 mt-0.5">Mulai {{ $timeOutStart ?? '13:00' }} WIB</span>
             </a>
         </div>
     </div>

@@ -125,7 +125,7 @@
                             </span>
                             <input type="text" name="school_name" id="school_name" value="{{ old('school_name', $schoolName) }}" required
                                 class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800 font-medium"
-                                placeholder="Contoh: SMP Negeri Nangtang">
+                                placeholder="Contoh: SMPN SATU ATAP 1 CIGALONTANG">
                         </div>
                     </div>
 
@@ -140,7 +140,7 @@
                             </span>
                             <input type="text" name="app_description" id="app_description" value="{{ old('app_description', $appDescription) }}"
                                 class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-slate-800"
-                                placeholder="Contoh: Sistem Absensi SMP Negeri Nangtang">
+                                placeholder="Contoh: Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG">
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Keterangan singkat di bawah nama aplikasi pada halaman login.</p>
                     </div>
@@ -156,7 +156,7 @@
                             </span>
                             <input type="text" id="app_footer" value="{{ $appFooter }}" disabled
                                 class="w-full pl-11 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed"
-                                placeholder="Contoh: © 2026 KKN Kelompok 02 Nangtang. All rights reserved.">
+                                placeholder="Contoh: © 2026 KKN Kelompok 02 Cigalontang. All rights reserved.">
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Hak cipta sudah ditetapkan, tidak dapat diubah. Ditampilkan di bagian bawah login & footer halaman.</p>
                     </div>

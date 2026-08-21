@@ -164,7 +164,7 @@
                 <p class="text-[10px] text-slate-500 mt-0.5">NIP. ........................................</p>
             </div>
             <div>
-                <p class="font-medium">Nangtang, {{ now()->translatedFormat('d F Y') }}</p>
+                <p class="font-medium">Cigalontang, {{ now()->translatedFormat('d F Y') }}</p>
                 <p class="font-bold text-slate-900">Wali Kelas {{ $class->name }}</p>
                 <div class="h-16"></div>
                 <p class="font-bold underline text-slate-900">( ________________________ )</p>

@@ -19,7 +19,7 @@ class ReportController extends Controller
         $classes = ClassRoom::with('academicYear')->orderBy('name', 'asc')->get();
         $academicYears = AcademicYear::orderBy('id', 'desc')->get();
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
 
         // =============================================
@@ -166,7 +166,7 @@ class ReportController extends Controller
         $classId = $request->input('class_id');
         $class = ClassRoom::with('academicYear')->findOrFail($classId);
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
 
         $attendances = Attendance::with('student')
@@ -186,7 +186,7 @@ class ReportController extends Controller
         $classId = $request->input('class_id');
         $class = ClassRoom::with('academicYear')->findOrFail($classId);
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
 
         $students = Student::where('class_id', $classId)
@@ -234,7 +234,7 @@ class ReportController extends Controller
         $class = ClassRoom::with('academicYear')->findOrFail($classId);
         $academicYear = AcademicYear::find($academicYearId) ?? $class->academicYear;
 
-        $schoolName = Setting::get('school_name', 'SMP Negeri Nangtang');
+        $schoolName = Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG');
         $appName = Setting::get('app_name', 'N-Presence');
 
         $students = Student::where('class_id', $classId)

@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Cache;
 
 class AttendanceController extends Controller
 {
-    private static $timeInLimit = null;
-    private static $timeOutStart = null;
-
     public function scanIn(Request $request): JsonResponse
     {
         $request->validate(['nisn' => 'required|string']);
@@ -41,19 +38,14 @@ class AttendanceController extends Controller
             ], 409);
         }
 
-        $timeIn = now();
-        if (self::$timeInLimit === null) {
-            self::$timeInLimit = Cache::remember('time_in_limit', 3600, function () {
-                return Setting::get('time_in_limit', '07:00');
-            });
-        }
-        $lateLimit = self::$timeInLimit;
+        $now = now();
+        $timeInLimit = Setting::get('time_in_limit', '07:00');
+        $limitTime = Carbon::parse($today . ' ' . $timeInLimit);
         $lateDuration = null;
         $status = 'Hadir';
 
-        $limitTime = Carbon::parse($lateLimit);
-        if ($timeIn->greaterThan($limitTime)) {
-            $lateDuration = (int) $limitTime->diffInMinutes($timeIn);
+        if ($now->greaterThan($limitTime)) {
+            $lateDuration = (int) $limitTime->diffInMinutes($now);
             $status = 'Terlambat';
         }
 
@@ -63,7 +55,7 @@ class AttendanceController extends Controller
         Attendance::updateOrCreate(
             ['student_id' => $student->id, 'date' => $today],
             [
-                'time_in' => $timeIn,
+                'time_in' => $now,
                 'status' => $status,
                 'late_duration_minutes' => $lateDuration ?? 0,
                 'scanned_by' => Auth::id(),
@@ -120,13 +112,11 @@ class AttendanceController extends Controller
         }
 
         // Check if current time is before allowed scan-out time
-        if (self::$timeOutStart === null) {
-            self::$timeOutStart = Cache::remember('time_out_start', 3600, function () {
-                return Setting::get('time_out_start', '13:00');
-            });
-        }
-        $startTime = Carbon::parse(self::$timeOutStart);
-        if (now()->lessThan($startTime)) {
+        $timeOutStart = Setting::get('time_out_start', '13:00');
+        $now = now();
+        $startTime = Carbon::parse($today . ' ' . $timeOutStart);
+
+        if ($now->lessThan($startTime)) {
             return response()->json([
                 'status' => 'warning',
                 'scan_type' => 'out',
@@ -134,11 +124,10 @@ class AttendanceController extends Controller
                 'student_nisn' => $student->nisn,
                 'student_class' => $student->classRoom->name ?? '-',
                 'student_photo' => $student->photo_path ? asset('storage/' . $student->photo_path) : null,
-                'message' => 'Belum saatnya scan pulang! Scan pulang baru diperbolehkan mulai pukul ' . $startTime->format('H:i') . '.',
+                'message' => 'Belum saatnya scan pulang! Scan pulang baru diperbolehkan mulai pukul ' . $startTime->format('H:i') . ' WIB.',
             ], 422);
         }
 
-        $now = now();
         $attendance->update([
             'time_out' => $now,
         ]);

@@ -12,23 +12,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat akun Admin default
-        User::create([
-            'name'     => 'Administrator',
-            'username' => 'admin',
-            'password' => 'admin123',
-            'role'     => 'admin',
-        ]);
+        // Buat atau perbarui akun Admin default
+        User::updateOrCreate(
+            ['username' => 'admin'],
+            [
+                'name'     => 'Administrator',
+                'password' => 'admin123',
+                'role'     => 'admin',
+            ]
+        );
 
-        // Buat akun Guru Piket default
-        User::create([
-            'name'     => 'Guru Piket',
-            'username' => 'piket',
-            'password' => 'piket123',
-            'role'     => 'piket',
-        ]);
+        // Buat atau perbarui akun Guru Piket default
+        User::updateOrCreate(
+            ['username' => 'piket'],
+            [
+                'name'     => 'Guru Piket',
+                'password' => 'piket123',
+                'role'     => 'piket',
+            ]
+        );
 
-        // Seed default settings
+        // Seed default settings & real data
         $this->call(SettingSeeder::class);
+        $this->call(RealDataSeeder::class);
     }
 }
