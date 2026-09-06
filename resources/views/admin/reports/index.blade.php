@@ -28,7 +28,7 @@
     <div class="skeuo-card overflow-hidden">
         <div class="p-3 bg-slate-100 border-b border-slate-200/80 shadow-inner">
             <div class="flex space-x-2 overflow-x-auto p-1 bg-slate-200/60 rounded-2xl border border-slate-300/60 shadow-inner">
-                <button @click="activeTab = 'daily'" 
+                <button @click="activeTab = 'daily'"
                     :class="activeTab === 'daily' ? 'bg-white text-primary font-bold shadow-md shadow-slate-300/50 border border-slate-200/80' : 'text-slate-600 hover:text-slate-900 font-semibold'"
                     class="px-5 py-2.5 rounded-xl text-xs transition-all flex items-center space-x-2 shrink-0 skeuo-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -37,7 +37,7 @@
                     <span>1. Laporan Harian</span>
                 </button>
 
-                <button @click="activeTab = 'monthly'" 
+                <button @click="activeTab = 'monthly'"
                     :class="activeTab === 'monthly' ? 'bg-white text-primary font-bold shadow-md shadow-slate-300/50 border border-slate-200/80' : 'text-slate-600 hover:text-slate-900 font-semibold'"
                     class="px-5 py-2.5 rounded-xl text-xs transition-all flex items-center space-x-2 shrink-0 skeuo-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -46,7 +46,7 @@
                     <span>2. Rekapitulasi Bulanan</span>
                 </button>
 
-                <button @click="activeTab = 'semester'" 
+                <button @click="activeTab = 'semester'"
                     :class="activeTab === 'semester' ? 'bg-white text-primary font-bold shadow-md shadow-slate-300/50 border border-slate-200/80' : 'text-slate-600 hover:text-slate-900 font-semibold'"
                     class="px-5 py-2.5 rounded-xl text-xs transition-all flex items-center space-x-2 shrink-0 skeuo-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -234,7 +234,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.615 0-1.11-.474-1.12-1.078L6 18m11.66 0h-11.66m11.66 0a3.921 3.921 0 0 0-3.16-3.921m-5.34 0a3.921 3.921 0 0 0-3.16 3.921m7.437-11.62L16.55 3H7.45L6.063 6.38M16.547 9a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Z" />
                             </svg>
-                            <span>Cetak Bulanan</span>
+                            <span>Cetak</span>
                         </a>
                     @endif
                 </div>
@@ -342,7 +342,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.615 0-1.11-.474-1.12-1.078L6 18m11.66 0h-11.66m11.66 0a3.921 3.921 0 0 0-3.16-3.921m-5.34 0a3.921 3.921 0 0 0-3.16 3.921m7.437-11.62L16.55 3H7.45L6.063 6.38M16.547 9a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Z" />
                             </svg>
-                            <span>Cetak Format Raport</span>
+                            <span>Cetak</span>
                         </a>
                     @endif
                 </div>
