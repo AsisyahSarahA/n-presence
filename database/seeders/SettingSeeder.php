@@ -34,7 +34,7 @@ class SettingSeeder extends Seeder
 
         Setting::updateOrCreate(
             ['key' => 'app_footer'],
-            ['value' => '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.', 'description' => 'Teks Footer Aplikasi']
+            ['value' => 'KKN 02 2026 LP3I Desa Nangtang (Manajemen Informatika)', 'description' => 'Teks Footer Aplikasi']
         );
 
         Setting::updateOrCreate(

@@ -49,8 +49,8 @@ class AttendanceController extends Controller
             $status = 'Terlambat';
         }
 
-        $motivationHadir = 'Keren! Terima kasih sudah datang tepat waktu hari ini. Tetap semangat belajarnya ya! 🌟';
-        $motivationTelat = 'Yah, kamu terlambat. Tapi nggak apa-apa, lebih baik terlambat daripada tidak datang. Besok bangun lebih pagi ya! 💪';
+        $motivationHadir = 'Terima kasih sudah datang tepat waktu hari ini. Tetap semangat belajarnya!';
+        $motivationTelat = 'Kamu tercatat terlambat hari ini. Tetap semangat dan besok usahakan hadir lebih awal!';
 
         Attendance::updateOrCreate(
             ['student_id' => $student->id, 'date' => $today],
@@ -144,7 +144,7 @@ class AttendanceController extends Controller
             'attendance_status' => 'Hadir',
             'time_out' => $timeOutFormatted,
             'late_duration' => $attendance->late_duration_minutes ? "{$attendance->late_duration_minutes}" : '0',
-            'motivation_text' => 'Hari yang luar biasa... hati-hati di jalan! 🏡',
+            'motivation_text' => 'Hari yang luar biasa... selamat beristirahat dan hati-hati di jalan!',
         ]);
     }
 }

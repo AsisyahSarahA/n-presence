@@ -19,20 +19,22 @@
                         <div class="text-[10px] font-mono text-slate-400">NISN: {{ $att->student->nisn ?? '-' }}</div>
                     </td>
                     <td class="py-3.5 px-4 text-center font-semibold">
-                        Kelas {{ $att->student->classRoom->name ?? '-' }}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 shadow-[inset_0_1px_0_#ffffff] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
+                            Kelas {{ $att->student->classRoom->name ?? '-' }}
+                        </span>
                     </td>
                     <td class="py-3.5 px-4 text-center">
                         @php
                             $eff = $att->effective_status;
                             $badge = match($eff) {
-                                'Hadir' => 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30',
-                                'Terlambat' => 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30',
-                                'Izin' => 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30',
-                                'Sakit' => 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-500/20 dark:text-orange-400 dark:border-orange-500/30',
-                                default => 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-500/20 dark:text-rose-400 dark:border-rose-500/30',
+                                'Hadir' => 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(16,185,129,0.15)] dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40',
+                                'Terlambat' => 'bg-amber-50 text-amber-800 border-amber-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(245,158,11,0.15)] dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/40',
+                                'Izin' => 'bg-sky-50 text-sky-800 border-sky-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(14,165,233,0.15)] dark:bg-sky-500/20 dark:text-sky-300 dark:border-sky-500/40',
+                                'Sakit' => 'bg-amber-50 text-amber-900 border-amber-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(245,158,11,0.15)] dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/40',
+                                default => 'bg-rose-50 text-rose-800 border-rose-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(244,63,94,0.15)] dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40',
                             };
                         @endphp
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $badge }}">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $badge }}">
                             {{ $eff }}
                         </span>
                     </td>
@@ -41,15 +43,15 @@
                     </td>
                     <td class="py-3.5 px-4 text-center">
                         @if($att->time_out)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-sky-100 text-sky-800 border border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/50 shadow-sm">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(14,165,233,0.15)] dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/50">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 mr-1 text-sky-600 dark:text-sky-400">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                                 </svg>
                                 {{ \Carbon\Carbon::parse($att->time_out)->format('H:i') }}
                             </span>
                         @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
-                                Menunggu Waktu Pulang
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200 shadow-[inset_0_1px_0_#ffffff] dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
+                                Menunggu Pulang
                             </span>
                         @endif
                     </td>

@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('schoolName', Setting::get('school_name', 'SMPN SATU ATAP 1 CIGALONTANG'));
                 $view->with('appDescription', Setting::get('app_description', 'Sistem Absensi SMPN SATU ATAP 1 CIGALONTANG'));
                 $view->with('appLogo', Setting::get('app_logo'));
-                $view->with('appFooter', Setting::get('app_footer', '© 2026 KKN Kelompok 02 Cigalontang. All rights reserved.'));
+                $view->with('appFooter', Setting::get('app_footer', 'KKN 02 2026 LP3I Desa Nangtang (Manajemen Informatika)'));
                 $view->with('timeInLimit', Setting::get('time_in_limit', '07:00'));
                 $view->with('timeInTolerance', Setting::get('time_in_tolerance', '07:15'));
                 $view->with('timeOutStart', Setting::get('time_out_start', '13:00'));

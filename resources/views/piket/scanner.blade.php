@@ -35,57 +35,69 @@
 
 <div class="max-w-md mx-auto space-y-4">
 
-    <!-- Mode Indicator Badge -->
+    <!-- Mode Indicator Badge (Tactile Beveled Pill) -->
     <div id="mode-badge" class="flex items-center justify-center gap-2 mb-1">
-        <span id="mode-badge-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse"></span>
-        <span id="mode-badge-text" class="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Mode Masuk Pagi</span>
+        <span class="skeuo-badge px-3 py-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-black shadow-sm flex items-center gap-2">
+            <span id="mode-badge-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse"></span>
+            <span id="mode-badge-text" class="uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-black">Mode Masuk Pagi</span>
+        </span>
     </div>
 
-    <!-- Responsive Camera Viewport Container -->
-    <div id="camera-container" class="relative bg-black rounded-3xl overflow-hidden shadow-xl border-2 border-emerald-500/50 flex items-center justify-center transition-all duration-500 w-full h-[360px] sm:h-[380px] md:h-[400px] max-h-[60vh]">
+    <!-- Responsive Camera Viewport Container (Hardware Lens Bezel) -->
+    <div id="camera-container" class="relative bg-black rounded-3xl overflow-hidden shadow-[inset_0_4px_12px_rgba(0,0,0,0.9),0_12px_32px_rgba(15,23,42,0.4)] border-4 border-slate-700/80 dark:border-slate-800 flex items-center justify-center transition-all duration-500 w-full h-[360px] sm:h-[380px] md:h-[400px] max-h-[60vh]">
+        <!-- Top Bezel Specular Highlight Line -->
+        <div class="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-30"></div>
+
         <!-- Scanner Target Overlay Frame -->
         <div id="scan-overlay" class="absolute inset-0 border-2 border-emerald-400/50 rounded-3xl pointer-events-none z-10 transition-all duration-500"></div>
         <div id="scan-line" class="absolute left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-emerald-400 shadow-[0_0_12px_#10b981] animate-laser z-10 transition-all duration-500"></div>
 
         <!-- Skeleton Loading Kamera -->
-        <div id="scanner-skeleton" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 z-20 transition-opacity duration-300">
-            <div class="w-12 h-12 rounded-full border-4 border-slate-700 border-t-emerald-500 animate-spin mb-4"></div>
-            <p class="text-xs text-slate-300 animate-pulse font-medium">Menghubungkan ke Kamera...</p>
+        <div id="scanner-skeleton" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950 z-20 transition-opacity duration-300">
+            <div class="w-12 h-12 rounded-full border-4 border-slate-800 border-t-emerald-500 animate-spin mb-4"></div>
+            <p class="text-xs text-slate-300 animate-pulse font-bold">Menghubungkan ke Kamera...</p>
         </div>
 
         <!-- Html5Qrcode Scanner Element -->
         <div id="reader" class="w-full h-full"></div>
     </div>
 
-    <!-- Mode Selector Buttons -->
-    <div class="grid grid-cols-2 gap-3">
+    <!-- Mode Selector Buttons (Tactile 3D Buttons) -->
+    <div class="grid grid-cols-2 gap-3.5">
         <!-- Mode Masuk -->
-        <button id="btn-mode-in" onclick="setMode('in')"
-            class="flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-md shadow-blue-500/10 bg-blue-600 border-blue-600 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-1 text-white">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-            </svg>
-            <span class="text-xs font-bold uppercase tracking-wider">Mode Masuk</span>
-            <span class="text-[9px] opacity-90 mt-0.5">Absensi Pagi Hari</span>
+        <button id="btn-mode-in" onclick="setMode('in')" type="button"
+            class="flex flex-col items-center justify-center p-4 rounded-2xl border-t border-t-white/30 border-b-[3px] border-b-blue-900 bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(37,99,235,0.25)] transition-all duration-200 active:translate-y-[2px] active:border-b-[1px] select-none">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                </svg>
+            </div>
+            <span class="text-xs font-black uppercase tracking-wider">Mode Masuk</span>
+            <span class="text-[10px] text-blue-100 font-semibold mt-0.5">Absensi Pagi Hari</span>
         </button>
 
         <!-- Mode Pulang -->
-        <button id="btn-mode-out" onclick="setMode('out')"
-            class="flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-sm bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mb-1 text-slate-400 dark:text-slate-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-            </svg>
-            <span class="text-xs font-bold uppercase tracking-wider">Mode Pulang</span>
-            <span class="text-[9px] text-slate-400 dark:text-slate-500 mt-0.5">Mulai {{ $timeOutStart ?? '13:00' }} WIB</span>
+        <button id="btn-mode-out" onclick="setMode('out')" type="button"
+            class="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-b from-white to-slate-100 dark:from-slate-800 dark:to-slate-900 text-slate-600 dark:text-slate-300 shadow-[inset_0_1px_0_#ffffff,0_2px_4px_rgba(0,0,0,0.05),0_3px_0_#cbd5e1] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_3px_0_#0f172a] transition-all duration-200 active:translate-y-[2px] hover:bg-slate-50 select-none">
+            <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center mb-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-slate-500 dark:text-slate-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                </svg>
+            </div>
+            <span class="text-xs font-black uppercase tracking-wider">Mode Pulang</span>
+            <span class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-0.5">Mulai {{ $timeOutStart ?? '13:00' }} WIB</span>
         </button>
     </div>
 
-    <!-- Quick Tip Banner -->
-    <div id="tip-banner" class="p-3.5 bg-emerald-50/90 dark:bg-slate-900/90 border border-emerald-200/80 dark:border-slate-800 rounded-2xl text-center shadow-sm">
-        <p class="text-xs text-emerald-900 dark:text-slate-200 font-semibold flex items-center justify-center gap-1.5">
-            <span>⚡ Sensor Otomatis Aktif (Scan Instan)</span>
+    <!-- Quick Tip Banner (Tactile Card) -->
+    <div id="tip-banner" class="skeuo-card p-3.5 text-center">
+        <p class="text-xs text-slate-800 dark:text-slate-200 font-black flex items-center justify-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-emerald-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+            </svg>
+            <span>Sensor Otomatis Aktif (Scan Instan)</span>
         </p>
-        <p class="text-[10px] text-emerald-700 dark:text-slate-400 mt-0.5">Arahkan QR Code Kartu Siswa ke area kotak di atas</p>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Arahkan QR Code Kartu Siswa ke area kamera di atas</p>
     </div>
 </div>
 
@@ -198,32 +210,32 @@
         const badgeText = document.getElementById('mode-badge-text');
 
         if (mode === 'in') {
-            btnIn.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-md shadow-blue-500/10 bg-blue-600 border-blue-600 text-white";
-            btnIn.querySelector('svg').className = "w-6 h-6 mb-1 text-white";
+            btnIn.className = "flex flex-col items-center justify-center p-4 rounded-2xl border-t border-t-white/30 border-b-[3px] border-b-blue-900 bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(37,99,235,0.25)] transition-all duration-200 active:translate-y-[2px] active:border-b-[1px] select-none";
+            btnIn.querySelector('svg').className = "w-5 h-5 text-white";
 
-            btnOut.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-sm bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/80";
-            btnOut.querySelector('svg').className = "w-6 h-6 mb-1 text-slate-400 dark:text-slate-500";
+            btnOut.className = "flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-b from-white to-slate-100 dark:from-slate-800 dark:to-slate-900 text-slate-600 dark:text-slate-300 shadow-[inset_0_1px_0_#ffffff,0_2px_4px_rgba(0,0,0,0.05),0_3px_0_#cbd5e1] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_3px_0_#0f172a] transition-all duration-200 active:translate-y-[2px] hover:bg-slate-50 select-none";
+            btnOut.querySelector('svg').className = "w-5 h-5 text-slate-500 dark:text-slate-400";
 
-            camera.className = "relative bg-black rounded-3xl overflow-hidden shadow-xl border-2 border-emerald-500/50 flex items-center justify-center transition-all duration-500 min-h-[300px]";
+            camera.className = "relative bg-black rounded-3xl overflow-hidden shadow-[inset_0_4px_12px_rgba(0,0,0,0.9),0_12px_32px_rgba(15,23,42,0.4)] border-4 border-slate-700/80 dark:border-slate-800 flex items-center justify-center transition-all duration-500 w-full h-[360px] sm:h-[380px] md:h-[400px] max-h-[60vh]";
             overlay.className = "absolute inset-0 border-2 border-emerald-400/50 rounded-3xl pointer-events-none z-10 transition-all duration-500";
-            scanLine.className = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-0.5 bg-emerald-400/90 shadow-[0_0_12px_#10b981] animate-pulse z-10 transition-all duration-500";
+            scanLine.className = "absolute left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-emerald-400 shadow-[0_0_12px_#10b981] animate-laser z-10 transition-all duration-500";
 
             badgeDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse";
-            badgeText.className = "text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400";
+            badgeText.className = "uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-black";
             badgeText.innerText = 'Mode Masuk Pagi';
         } else {
-            btnIn.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-sm bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/80";
-            btnIn.querySelector('svg').className = "w-6 h-6 mb-1 text-slate-400 dark:text-slate-500";
+            btnIn.className = "flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-b from-white to-slate-100 dark:from-slate-800 dark:to-slate-900 text-slate-600 dark:text-slate-300 shadow-[inset_0_1px_0_#ffffff,0_2px_4px_rgba(0,0,0,0.05),0_3px_0_#cbd5e1] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_3px_0_#0f172a] transition-all duration-200 active:translate-y-[2px] hover:bg-slate-50 select-none";
+            btnIn.querySelector('svg').className = "w-5 h-5 text-slate-500 dark:text-slate-400";
 
-            btnOut.className = "flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all duration-300 shadow-md shadow-purple-500/10 bg-purple-600 border-purple-600 text-white";
-            btnOut.querySelector('svg').className = "w-6 h-6 mb-1 text-white";
+            btnOut.className = "flex flex-col items-center justify-center p-4 rounded-2xl border-t border-t-white/30 border-b-[3px] border-b-purple-950 bg-gradient-to-b from-purple-600 to-purple-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_4px_10px_rgba(168,85,247,0.25)] transition-all duration-200 active:translate-y-[2px] active:border-b-[1px] select-none";
+            btnOut.querySelector('svg').className = "w-5 h-5 text-white";
 
-            camera.className = "relative bg-black rounded-3xl overflow-hidden shadow-xl border-2 border-purple-500/50 flex items-center justify-center transition-all duration-500 min-h-[300px]";
+            camera.className = "relative bg-black rounded-3xl overflow-hidden shadow-[inset_0_4px_12px_rgba(0,0,0,0.9),0_12px_32px_rgba(15,23,42,0.4)] border-4 border-purple-900/80 dark:border-purple-950 flex items-center justify-center transition-all duration-500 w-full h-[360px] sm:h-[380px] md:h-[400px] max-h-[60vh]";
             overlay.className = "absolute inset-0 border-2 border-purple-400/50 rounded-3xl pointer-events-none z-10 transition-all duration-500";
-            scanLine.className = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-0.5 bg-purple-400/90 shadow-[0_0_12px_#a855f7] animate-pulse z-10 transition-all duration-500";
+            scanLine.className = "absolute left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-purple-400 shadow-[0_0_12px_#a855f7] animate-laser z-10 transition-all duration-500";
 
             badgeDot.className = "w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7] animate-pulse";
-            badgeText.className = "text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400";
+            badgeText.className = "uppercase tracking-widest text-purple-600 dark:text-purple-400 font-black";
             badgeText.innerText = 'Mode Pulang (Mulai {{ $timeOutStart ?? "13:00" }} WIB)';
         }
     }
@@ -370,13 +382,13 @@
             if (data.status === 'success') {
                 if (currentMode === 'out') {
                     const timeOutLabel = data.time_out || new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                    showToast('success', { ...data, message: `✅ Berhasil Scan Pulang pada ${timeOutLabel}` });
+                    showToast('success', { ...data, message: `Berhasil Scan Pulang pada ${timeOutLabel}` });
                     speakText('Hari yang luar biasa, hati-hati di jalan');
                 } else if (data.attendance_status === 'Terlambat') {
-                    showToast('warning', { ...data, message: `⚠️ Terlambat: ${data.late_duration} Menit` });
+                    showToast('warning', { ...data, message: `Terlambat: ${data.late_duration} Menit` });
                     speakText('Selamat datang dan semangat belajar');
                 } else {
-                    showToast('success', { ...data, message: '✅ Scan Masuk Berhasil' });
+                    showToast('success', { ...data, message: 'Scan Masuk Berhasil' });
                     speakText('Selamat datang dan semangat belajar');
                 }
             } else if (data.status === 'warning') {

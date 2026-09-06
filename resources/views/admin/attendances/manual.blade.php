@@ -6,49 +6,58 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Header Banner -->
-    <div class="bg-gradient-to-r from-primary to-slate-800 rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- Header Banner Slab -->
+    <div class="bg-gradient-to-br from-[#182e4b] via-primary to-[#0f1d30] rounded-3xl p-6 text-white border-t border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_10px_24px_-4px_rgba(15,23,42,0.35)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h2 class="text-xl font-bold tracking-wide">Lembar Presensi Manual per Kelas</h2>
-            <p class="text-xs text-slate-300 mt-1 max-w-xl">
-                Kelola dan perbarui data kehadiran seluruh siswa dalam satu kelas secara sekaligus. Gunakan fitur tombol aksi cepat untuk mengisi absensi secara efisien.
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-semibold text-blue-200 mb-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Lembar Presensi Kelas</span>
+            </div>
+            <h2 class="text-xl font-black tracking-tight text-white drop-shadow-sm">Presensi Manual per Kelas</h2>
+            <p class="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+                Kelola dan perbarui data kehadiran seluruh siswa dalam satu kelas secara serentak. Tombol status didesain tactile interaktif untuk percepatan input presensi harian.
             </p>
         </div>
         <div class="flex items-center space-x-2 shrink-0">
-            <span class="px-3.5 py-1.5 bg-white/10 border border-white/20 rounded-xl text-xs font-semibold text-slate-200">
-                📅 {{ \Carbon\Carbon::parse($date)->translatedFormat('l, d F Y') }}
+            <span class="inline-flex items-center space-x-2 px-4 py-2 bg-[#0f1d30]/70 border border-white/15 rounded-2xl text-xs font-bold text-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-blue-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M12 3v2.25m5.25-2.25V5.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Z" />
+                </svg>
+                <span>{{ \Carbon\Carbon::parse($date)->translatedFormat('l, d F Y') }}</span>
             </span>
         </div>
     </div>
 
     <!-- Alert Success -->
     @if(session('success'))
-        <div class="p-4 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 rounded-r-2xl text-sm font-semibold flex items-center justify-between shadow-sm">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-600">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
+        <div class="p-4 bg-gradient-to-r from-emerald-50 to-white border-l-4 border-emerald-500 text-emerald-900 rounded-2xl text-sm font-semibold flex items-center justify-between shadow-[0_2px_8px_rgba(16,185,129,0.12)]">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                </div>
                 <span>{{ session('success') }}</span>
             </div>
         </div>
     @endif
 
     <!-- FILTER CARD -->
-    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+    <div class="skeuo-card p-6">
         <form method="GET" action="{{ route('admin.attendances.manual.index') }}" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 <!-- Custom Tanggal -->
                 <div>
-                    <label for="date" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Tanggal</label>
+                    <label for="date" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Pilih Tanggal</label>
                     <input type="date" name="date" id="date" value="{{ $date }}" required
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium text-slate-800 bg-slate-50">
+                        class="skeuo-input w-full h-11 px-4 text-sm font-semibold text-slate-800">
                 </div>
 
                 <!-- Pilih Kelas -->
                 <div>
-                    <label for="class_id" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Pilih Kelas</label>
+                    <label for="class_id" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Pilih Kelas</label>
                     <select name="class_id" id="class_id" required
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-slate-50 font-medium text-slate-800">
+                        class="skeuo-input w-full h-11 px-4 text-sm font-semibold text-slate-800">
                         <option value="">-- Pilih Kelas --</option>
                         @foreach ($classes as $class)
                             <option value="{{ $class->id }}" {{ (string)$classId === (string)$class->id ? 'selected' : '' }}>
@@ -60,12 +69,12 @@
 
                 <!-- Cari Nama / NISN -->
                 <div>
-                    <label for="search" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Cari Nama / NISN</label>
+                    <label for="search" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Cari Nama / NISN</label>
                     <div class="relative">
                         <input type="text" name="search" id="search_input" value="{{ $search ?? '' }}"
                             placeholder="Ketik Nama atau NISN..." onkeyup="liveFilterTable()"
-                            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium text-slate-800 bg-slate-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-400 absolute left-3 top-3">
+                            class="skeuo-input w-full h-11 pl-10 pr-4 text-sm font-semibold text-slate-800 placeholder:font-normal">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                     </div>
@@ -73,9 +82,9 @@
 
                 <!-- Filter Status -->
                 <div>
-                    <label for="status_filter" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Filter Status</label>
+                    <label for="status_filter" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Filter Status</label>
                     <select name="status_filter" id="status_filter_select" onchange="liveFilterTable()"
-                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-slate-50 font-medium text-slate-800">
+                        class="skeuo-input w-full h-11 px-4 text-sm font-semibold text-slate-800">
                         <option value="">-- Semua Status --</option>
                         <option value="Hadir" {{ ($statusFilter ?? '') === 'Hadir' ? 'selected' : '' }}>Hadir</option>
                         <option value="Terlambat" {{ ($statusFilter ?? '') === 'Terlambat' ? 'selected' : '' }}>Terlambat</option>
@@ -89,16 +98,15 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+            <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-200/80">
                 @if($search || $statusFilter)
                     <a href="{{ route('admin.attendances.manual.index', ['date' => $date, 'class_id' => $classId]) }}" 
-                       class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all">
+                       class="skeuo-btn skeuo-btn-light h-11 px-4 text-xs sm:text-sm font-bold">
                         Reset Filter
                     </a>
                 @endif
-                <button type="submit"
-                    class="px-6 py-2.5 bg-primary hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <button type="submit" class="skeuo-btn skeuo-btn-primary h-11 px-6 text-xs sm:text-sm font-bold shadow-md flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                     <span>Tampilkan Presensi Kelas</span>
@@ -108,68 +116,74 @@
     </div>
 
     @if ($classId)
-        <!-- SUMMARY STATS BADGES -->
+        <!-- SUMMARY STATS BADGES (Tactile Mini Cards) -->
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-            <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-slate-400">Total Siswa</div>
-                <div class="text-xl font-extrabold text-slate-800 mt-1">{{ $summary['total'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Siswa</div>
+                <div class="text-xl font-black text-slate-800 mt-1">{{ $summary['total'] }}</div>
             </div>
-            <div class="bg-emerald-50/80 border border-emerald-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-emerald-600">Hadir</div>
-                <div class="text-xl font-extrabold text-emerald-700 mt-1">{{ $summary['hadir'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-emerald-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Hadir</div>
+                <div class="text-xl font-black text-emerald-700 mt-1">{{ $summary['hadir'] }}</div>
             </div>
-            <div class="bg-amber-50/80 border border-amber-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-amber-600">Terlambat</div>
-                <div class="text-xl font-extrabold text-amber-700 mt-1">{{ $summary['terlambat'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-amber-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-amber-600">Terlambat</div>
+                <div class="text-xl font-black text-amber-700 mt-1">{{ $summary['terlambat'] }}</div>
             </div>
-            <div class="bg-purple-50/80 border border-purple-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-purple-600">Sudah Pulang</div>
-                <div class="text-xl font-extrabold text-purple-700 mt-1">{{ $summary['sudah_pulang'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-purple-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Sdh Pulang</div>
+                <div class="text-xl font-black text-purple-700 mt-1">{{ $summary['sudah_pulang'] }}</div>
             </div>
-            <div class="bg-blue-50/80 border border-blue-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-blue-600">Izin</div>
-                <div class="text-xl font-extrabold text-blue-700 mt-1">{{ $summary['izin'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-blue-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-blue-600">Izin</div>
+                <div class="text-xl font-black text-blue-700 mt-1">{{ $summary['izin'] }}</div>
             </div>
-            <div class="bg-orange-50/80 border border-orange-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-orange-600">Sakit</div>
-                <div class="text-xl font-extrabold text-orange-700 mt-1">{{ $summary['sakit'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-orange-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-orange-600">Sakit</div>
+                <div class="text-xl font-black text-orange-700 mt-1">{{ $summary['sakit'] }}</div>
             </div>
-            <div class="bg-red-50/80 border border-red-200/80 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-red-600">Alpha</div>
-                <div class="text-xl font-extrabold text-red-700 mt-1">{{ $summary['alpa'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-rose-200/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-rose-600">Alpha</div>
+                <div class="text-xl font-black text-rose-700 mt-1">{{ $summary['alpa'] }}</div>
             </div>
-            <div class="bg-slate-100 border border-slate-200 p-3.5 rounded-2xl shadow-sm text-center">
-                <div class="text-[10px] font-bold uppercase text-slate-500">Belum Absen</div>
-                <div class="text-xl font-extrabold text-slate-600 mt-1">{{ $summary['belum_absen'] }}</div>
+            <div class="skeuo-stat-card p-3.5 text-center !border-slate-300/80">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Belum Absen</div>
+                <div class="text-xl font-black text-slate-600 mt-1">{{ $summary['belum_absen'] }}</div>
             </div>
         </div>
 
         <!-- TABLE SHEET CARD -->
-        <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+        <div class="skeuo-card overflow-hidden">
             
             <!-- Toolbar & Quick Action Buttons -->
-            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="px-6 py-4 border-b border-slate-200/80 bg-gradient-to-r from-slate-50 to-white flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="font-bold text-slate-800 text-sm flex items-center space-x-2">
+                    <h3 class="font-black text-slate-800 text-sm flex items-center space-x-2">
                         <span>Lembar Presensi Siswa</span>
-                        <span class="px-2.5 py-0.5 bg-primary/10 text-primary text-xs font-extrabold rounded-full" id="visible-count-badge">
+                        <span class="skeuo-badge px-2.5 py-0.5 bg-primary/10 text-primary border-primary/20 text-xs font-black" id="visible-count-badge">
                             {{ $students->count() }} siswa
                         </span>
                     </h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Pilih status absensi untuk masing-masing siswa di bawah ini.</p>
+                    <p class="text-xs text-slate-500 mt-0.5 font-medium">Klik tombol switch status pada masing-masing baris siswa.</p>
                 </div>
 
                 <!-- Quick Action Buttons -->
                 @if($students->isNotEmpty())
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2.5">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden lg:inline">Aksi Cepat:</span>
                         <button type="button" onclick="setAllStatus('Hadir')"
-                            class="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl text-xs font-bold transition-all border border-emerald-200 flex items-center space-x-1">
-                            <span>✓ Tandai Semua Hadir</span>
+                            class="skeuo-btn skeuo-btn-success text-xs py-1.5 px-3.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                            <span>Tandai Semua Hadir</span>
                         </button>
                         <button type="button" onclick="setAllStatus('Alpa')"
-                            class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 rounded-xl text-xs font-bold transition-all border border-red-200 flex items-center space-x-1">
-                            <span>✕ Tandai Semua Alpa</span>
+                            class="skeuo-btn skeuo-btn-danger text-xs py-1.5 px-3.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            <span>Tandai Semua Alpa</span>
                         </button>
                     </div>
                 @endif
@@ -190,8 +204,8 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-                                    <th class="py-3.5 px-4 w-10 text-center">No</th>
+                                <tr class="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-black uppercase tracking-wider text-[11px]">
+                                    <th class="py-3.5 px-4 w-12 text-center">No</th>
                                     <th class="py-3.5 px-4">NISN & Nama Siswa</th>
                                     <th class="py-3.5 px-4 text-center">Status Masuk</th>
                                     <th class="py-3.5 px-4 text-center">Status Pulang</th>
@@ -201,61 +215,61 @@
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700">
                                 @foreach ($students as $index => $student)
-                                    <tr class="hover:bg-slate-50/80 transition-all student-row" 
+                                    <tr class="hover:bg-blue-50/30 transition-all student-row" 
                                         data-timeout="{{ $student->attendance_time_out ? 'true' : 'false' }}"
                                         data-name="{{ strtolower($student->name) }}"
                                         data-nisn="{{ strtolower($student->nisn) }}"
                                         data-status="{{ $student->attendance_status ?? 'Belum Absen' }}"
                                         data-student-id="{{ $student->id }}">
-                                        <td class="py-3.5 px-4 text-slate-400 font-mono text-center">{{ $index + 1 }}</td>
-                                        <td class="py-3.5 px-4">
-                                            <div class="font-bold text-slate-900 text-sm">{{ $student->name }}</div>
-                                            <div class="text-[11px] text-slate-400 font-mono">NISN: {{ $student->nisn }}</div>
+                                        <td class="py-3 px-4 text-slate-400 font-mono font-bold text-center">{{ $index + 1 }}</td>
+                                        <td class="py-3 px-4">
+                                            <div class="font-black text-slate-800 text-sm tracking-tight">{{ $student->name }}</div>
+                                            <div class="text-[11px] text-slate-400 font-mono font-semibold">NISN: {{ $student->nisn }}</div>
                                         </td>
-                                        <td class="py-3.5 px-4 text-center">
+                                        <td class="py-3 px-4 text-center">
                                             @php
-                                                $badgeColor = match ($student->attendance_status) {
-                                                    'Hadir' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
-                                                    'Terlambat' => 'bg-amber-100 text-amber-800 border-amber-200',
-                                                    'Sakit' => 'bg-orange-100 text-orange-800 border-orange-200',
-                                                    'Izin' => 'bg-blue-100 text-blue-800 border-blue-200',
-                                                    'Alpa' => 'bg-red-100 text-red-800 border-red-200',
-                                                    default => 'bg-slate-100 text-slate-400 border-slate-200',
+                                                $badgeStyle = match ($student->attendance_status) {
+                                                    'Hadir' => 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(16,185,129,0.15)]',
+                                                    'Terlambat' => 'bg-amber-50 text-amber-800 border-amber-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(245,158,11,0.15)]',
+                                                    'Sakit' => 'bg-orange-50 text-orange-800 border-orange-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(249,115,22,0.15)]',
+                                                    'Izin' => 'bg-blue-50 text-blue-800 border-blue-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(59,130,246,0.15)]',
+                                                    'Alpa' => 'bg-rose-50 text-rose-800 border-rose-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(244,63,94,0.15)]',
+                                                    default => 'bg-slate-100 text-slate-500 border-slate-300 shadow-[inset_0_1px_0_#ffffff]',
                                                 };
                                                 $badgeLabel = $student->attendance_status ?? 'Belum Absen';
                                             @endphp
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border {{ $badgeColor }}">
+                                            <span class="skeuo-badge px-3 py-1 font-bold {{ $badgeStyle }}">
                                                 {{ $badgeLabel }}
                                                 @if($student->attendance_time_in)
-                                                    <span class="ml-1 text-[10px] opacity-75">({{ \Carbon\Carbon::parse($student->attendance_time_in)->format('H:i') }})</span>
+                                                    <span class="ml-1 text-[10px] opacity-75 font-mono">({{ \Carbon\Carbon::parse($student->attendance_time_in)->format('H:i') }})</span>
                                                 @endif
                                             </span>
                                         </td>
-                                        <td class="py-3.5 px-4 text-center">
+                                        <td class="py-3 px-4 text-center">
                                             @if($student->attendance_time_out)
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                                <span class="skeuo-badge px-3 py-1 font-bold bg-purple-50 text-purple-800 border-purple-300 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(168,85,247,0.15)]">
                                                     Sudah Pulang
-                                                    <span class="ml-1 text-[10px] opacity-75">({{ \Carbon\Carbon::parse($student->attendance_time_out)->format('H:i') }})</span>
+                                                    <span class="ml-1 text-[10px] opacity-75 font-mono">({{ \Carbon\Carbon::parse($student->attendance_time_out)->format('H:i') }})</span>
                                                 </span>
                                             @else
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                                                <span class="skeuo-badge px-3 py-1 font-bold bg-slate-100 text-slate-500 border-slate-300 shadow-[inset_0_1px_0_#ffffff]">
                                                     Belum Pulang
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="py-3.5 px-4">
+                                        <td class="py-3 px-4">
                                             <div class="flex items-center justify-center flex-wrap gap-1.5">
                                                 @foreach (['Hadir', 'Terlambat', 'Izin', 'Sakit', 'Alpa'] as $opt)
-                                                    <label class="cursor-pointer">
+                                                    <label class="cursor-pointer select-none">
                                                         <input type="radio" 
                                                             name="attendances[{{ $student->id }}][status]"
                                                             value="{{ $opt }}"
                                                             data-student-id="{{ $student->id }}"
                                                             {{ $student->attendance_status === $opt ? 'checked' : '' }}
                                                             class="sr-only peer status-radio-{{ $opt }}">
-                                                        <span class="px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all inline-block
-                                                            border-slate-200 bg-white text-slate-500 hover:bg-slate-50
-                                                            peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:shadow-sm">
+                                                        <span class="px-2.5 py-1 rounded-xl text-xs font-bold border transition-all inline-block
+                                                            border-slate-200 bg-gradient-to-b from-white to-slate-50 text-slate-600 shadow-[inset_0_1px_0_#ffffff,0_1px_2px_rgba(0,0,0,0.05),0_2px_0_#cbd5e1] hover:bg-slate-100
+                                                            peer-checked:border-primary peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-[inset_0_2px_4px_rgba(0,0,0,0.35)] peer-checked:translate-y-[1px]">
                                                             {{ $opt }}
                                                         </span>
                                                     </label>
@@ -263,11 +277,11 @@
                                                 <input type="hidden" name="attendances[{{ $student->id }}][student_id]" value="{{ $student->id }}">
                                             </div>
                                         </td>
-                                        <td class="py-3.5 px-4">
+                                        <td class="py-3 px-4">
                                             <input type="text" name="attendances[{{ $student->id }}][notes]"
                                                 value="{{ $student->attendance_notes ?? '' }}"
                                                 placeholder="Catatan opsional..."
-                                                class="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-300">
+                                                class="skeuo-input text-xs py-1.5 px-3 placeholder:text-slate-400">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -275,11 +289,10 @@
                         </table>
                     </div>
 
-                    <div class="px-6 py-4 border-t border-slate-200 flex justify-between items-center bg-slate-50">
-                        <span class="text-xs text-slate-400 font-medium">Klik Simpan untuk memperbarui seluruh status yang telah dipilih.</span>
-                        <button type="button" onclick="confirmSave()"
-                            class="px-6 py-2.5 bg-primary hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <div class="px-6 py-4 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-3 bg-gradient-to-r from-slate-50 to-white">
+                        <span class="text-xs text-slate-500 font-medium">Klik Simpan untuk memperbarui status presensi siswa secara permanen.</span>
+                        <button type="button" onclick="confirmSave()" class="skeuo-btn skeuo-btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             <span>Simpan Presensi Kelas</span>
@@ -289,12 +302,14 @@
             @endif
         </div>
     @else
-        <div class="bg-white border border-slate-200 rounded-3xl p-12 text-center shadow-sm">
-            <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold text-2xl">
-                🏫
+        <div class="skeuo-card p-12 text-center">
+            <div class="w-16 h-16 bg-primary/10 text-primary border border-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold text-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_4px_10px_rgba(30,58,95,0.12)]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                </svg>
             </div>
-            <h3 class="font-bold text-slate-800 text-base mb-1">Pilih Kelas Terlebih Dahulu</h3>
-            <p class="text-xs text-slate-400 max-w-sm mx-auto">Pilih tanggal dan kelas di atas, lalu klik <strong>Tampilkan Presensi Kelas</strong> untuk membuka lembar absensi.</p>
+            <h3 class="font-black text-slate-800 text-base mb-1 tracking-tight">Pilih Kelas Terlebih Dahulu</h3>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">Pilih tanggal dan kelas di atas, lalu klik <strong>Tampilkan Presensi Kelas</strong> untuk membuka lembar absensi.</p>
         </div>
     @endif
 
@@ -385,7 +400,7 @@
             if (unpulangSelected.length > 3) sampleNames += `, dan ${unpulangSelected.length - 3} lainnya`;
 
             Swal.fire({
-                title: '⚠️ Peringatan Scan Pulang!',
+                title: 'Peringatan Scan Pulang!',
                 html: `Terdapat <strong>${unpulangSelected.length} siswa</strong> (${sampleNames}) yang <strong>belum melakukan scan pulang</strong>.<br><br>Apakah Anda yakin ingin menetapkan status <strong>HADIR / TERLAMBAT</strong> secara paksa (Admin Override)?`,
                 icon: 'warning',
                 showCancelButton: true,

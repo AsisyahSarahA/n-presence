@@ -8,20 +8,20 @@
 
 <div class="space-y-5 max-w-4xl mx-auto pb-8">
 
-    <!-- Top Navigation & Live Status Header -->
-    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-5 text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <!-- Top Navigation & Live Status Header Slab -->
+    <div class="bg-gradient-to-br from-[#182e4b] via-primary to-[#0f1d30] rounded-3xl p-5 text-white border-t border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_10px_24px_-4px_rgba(15,23,42,0.35)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 mb-1">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-300">Live Auto-Sync (30s)</span>
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] font-black uppercase tracking-widest text-emerald-300 mb-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Live Auto-Sync (30s)</span>
             </div>
-            <h1 class="text-xl font-bold tracking-wide">Daftar Kehadiran Siswa Hari Ini</h1>
-            <p class="text-xs text-slate-300 mt-0.5">{{ \Carbon\Carbon::parse($today)->translatedFormat('l, d F Y') }}</p>
+            <h1 class="text-xl font-black tracking-tight text-white drop-shadow-sm">Daftar Kehadiran Siswa Hari Ini</h1>
+            <p class="text-xs text-blue-200 mt-0.5 font-medium">{{ \Carbon\Carbon::parse($today)->translatedFormat('l, d F Y') }}</p>
         </div>
 
         <div class="flex items-center space-x-2 shrink-0">
-            <a href="{{ route('piket.scanner') }}" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl text-xs font-bold transition-all shadow-md flex items-center space-x-1.5 border border-emerald-400/30">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <a href="{{ route('piket.scanner') }}" class="skeuo-btn skeuo-btn-success text-xs py-2 px-4 flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
                 </svg>
                 <span>Buka Scanner</span>
@@ -29,42 +29,42 @@
         </div>
     </div>
 
-    <!-- Live Counter Badges (Soft Pastel Theme) -->
+    <!-- Live Counter Badges (Tactile 3D Stat Cards) -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <!-- Total Scanned -->
-        <div class="bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/60 p-4 rounded-2xl shadow-sm text-center">
-            <div class="text-[10px] font-bold uppercase text-slate-400">Total Scan Hari Ini</div>
+        <div class="skeuo-stat-card p-4 text-center">
+            <div class="text-[10px] font-black uppercase tracking-wider text-slate-500">Total Scan Hari Ini</div>
             <div class="text-2xl font-black text-slate-800 dark:text-white mt-1">{{ $summary['total_scanned'] }}</div>
         </div>
 
         <!-- Hadir Tepat -->
-        <div class="bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/40 p-4 rounded-2xl shadow-sm text-center">
-            <div class="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">Hadir Tepat</div>
+        <div class="skeuo-stat-card p-4 text-center !border-emerald-200/80 dark:!border-emerald-500/30">
+            <div class="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Hadir Tepat</div>
             <div class="text-2xl font-black text-emerald-700 dark:text-emerald-300 mt-1">{{ $summary['hadir'] }}</div>
         </div>
 
         <!-- Terlambat -->
-        <div class="bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/40 p-4 rounded-2xl shadow-sm text-center">
-            <div class="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400">Terlambat</div>
+        <div class="skeuo-stat-card p-4 text-center !border-amber-200/80 dark:!border-amber-500/30">
+            <div class="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">Terlambat</div>
             <div class="text-2xl font-black text-amber-700 dark:text-amber-300 mt-1">{{ $summary['terlambat'] }}</div>
         </div>
 
         <!-- Sudah Pulang -->
-        <div class="bg-sky-50/80 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-800/40 p-4 rounded-2xl shadow-sm text-center">
-            <div class="text-[10px] font-bold uppercase text-sky-600 dark:text-sky-400">Sudah Scan Pulang</div>
-            <div class="text-2xl font-black text-sky-700 dark:text-sky-300 mt-1">{{ $summary['sudah_pulang'] }}</div>
+        <div class="skeuo-stat-card p-4 text-center !border-purple-200/80 dark:!border-purple-500/30">
+            <div class="text-[10px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400">Sudah Scan Pulang</div>
+            <div class="text-2xl font-black text-purple-700 dark:text-purple-300 mt-1">{{ $summary['sudah_pulang'] }}</div>
         </div>
     </div>
 
     <!-- Filter & Search Bar -->
-    <div class="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/60 p-4 rounded-3xl shadow-sm">
+    <div class="skeuo-card p-4">
         <form method="GET" action="{{ route('piket.today') }}" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Nama / NISN Siswa..."
-                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs font-medium text-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary">
+                    class="skeuo-input text-xs font-semibold text-slate-800 dark:text-white">
             </div>
             <div>
-                <select name="class_id" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs font-medium text-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-primary">
+                <select name="class_id" class="skeuo-input text-xs font-semibold text-slate-800 dark:text-white">
                     <option value="">Semua Kelas</option>
                     @foreach($classes as $cls)
                         <option value="{{ $cls->id }}" {{ request('class_id') == $cls->id ? 'selected' : '' }}>Kelas {{ $cls->name }}</option>
@@ -72,11 +72,11 @@
                 </select>
             </div>
             <div class="flex items-center space-x-2">
-                <button type="submit" class="w-full py-2.5 bg-primary hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+                <button type="submit" class="skeuo-btn skeuo-btn-primary w-full text-xs py-2">
                     Filter Data
                 </button>
                 @if(request()->hasAny(['search', 'class_id']))
-                    <a href="{{ route('piket.today') }}" class="px-3 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200 transition-all shrink-0">
+                    <a href="{{ route('piket.today') }}" class="skeuo-btn skeuo-btn-light text-xs py-2 px-3 shrink-0">
                         Reset
                     </a>
                 @endif
@@ -84,11 +84,11 @@
         </form>
     </div>
 
-    <!-- Attendance History Table -->
-    <div class="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/60 rounded-3xl overflow-hidden shadow-sm">
-        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-            <h3 class="font-bold text-slate-800 dark:text-white text-sm">Daftar Aktivitas Scan Hari Ini</h3>
-            <span class="text-[10px] text-slate-400 font-mono">Halaman ini otomatis ter-refresh setiap 30 detik</span>
+    <!-- Attendance History Table Card -->
+    <div class="skeuo-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200/80 dark:border-slate-700 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-900">
+            <h3 class="font-black text-slate-800 dark:text-white text-sm tracking-tight">Daftar Aktivitas Scan Hari Ini</h3>
+            <span class="skeuo-badge px-2.5 py-0.5 text-[10px] text-slate-500 dark:text-slate-300 font-mono font-bold">Auto-refresh 30s</span>
         </div>
 
         <div id="table-container" class="relative">
